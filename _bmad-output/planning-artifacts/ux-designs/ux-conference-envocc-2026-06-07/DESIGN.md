@@ -2,7 +2,7 @@
 title: "ENVOCC Conference Room Booking System — Visual Design"
 status: final
 created: 2026-06-07
-updated: 2026-06-08
+updated: 2026-06-18
 sources:
   - ../../prds/prd-conference-envocc-2026-06-07/prd.md
   - .decision-log.md
@@ -160,7 +160,7 @@ Token-level intent only; markup/library is decided in architecture (UXD-011).
 | **Select** | Same shell as form field; used for Title and Meal-type pickers. |
 | **Toggle switch** | On = `green-700`; off = `ink-3`/`cream-200`. Used for the catering toggle and registration enable. |
 | **Read-only field** | `cream-100` fill, `ink-2` text, no border emphasis, not focusable as input — used for the auto-filled **event contact** (organizer name + phone) on the booking form (FR-095). Visibly distinct from editable fields. |
-| **Status badge** | Pill, radius `sm`. Registered = `green-100`/`green-700`; Attended = `green-700`/white; Cancelled = `cream-200`/`ink-2`. Carries a **text label**, never color-only. |
+| **Status badge** | Pill, radius `sm`. Registered = `green-100`/`green-700`; Cancelled = `cream-200`/`ink-2`. Carries a **text label**, never color-only. *(MVP statuses are Registered / Cancelled only — "Attended"/attendance tracking is out of scope per PRD FR-035 / DEC-032.)* |
 | **Calendar slot** | Available = `green-100` fill (no time label — time is set in the form, UXD-013); Booked = `green-500`; Blocked = hatched/`cream-200` with a label. Distinguished by label/pattern as well as color (a11y). |
 | **Booking card** | `card` surface, `shadow-2`, radius `md`; shows event name, room, date/time, registrant count, catering summary, copy-link action. |
 | **Modal** | `card`, radius `lg`, `shadow-3`, green header band. Used for the destructive **deactivate-room confirmation** (lists affected bookings, UXD-019). |
