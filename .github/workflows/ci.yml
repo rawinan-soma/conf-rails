@@ -46,7 +46,7 @@ jobs:
           bundler-cache: true
 
       - name: Scan for Rails security vulnerabilities (Brakeman)
-        run: bundle exec brakeman --no-pager --minimum-confidence 2
+        run: bundle exec brakeman --no-pager --confidence-level 2
 
   # Gate 3: bundler-audit — CVE scanning (fail on high/critical)
   bundler_audit:
