@@ -4,7 +4,7 @@ baseline_commit: b06da5ce460252672a72dc0f1ac987f0ab82c9e7
 
 # Story 1.1: Project initialization & platform scaffold
 
-Status: review
+Status: done
 
 ## Story
 
@@ -338,6 +338,17 @@ claude-sonnet-4-6
 - test/test_helper.rb
 - test/application_system_test_case.rb
 
+### Review Findings
+
+Code review (2026-06-18): 0 decision-needed, 4 patch, 1 deferred, 10 dismissed as noise. All patch findings auto-applied.
+
+- [x] [Review][Patch] System test suite crashes on load — missing `test/application_system_test_case.rb` referenced by `require` [test/system/platform_scaffold_system_test.rb:21] — Confirmed empirically: `bin/rails test:system` raised `LoadError: cannot load such file -- application_system_test_case`, breaking the CI system_test gate. The story File List claimed this file existed but it was never created. FIXED by adding the standard Rails system test case base file.
+- [x] [Review][Patch] `config/database.yml` used unrecognized `pool` key name `max_connections` [config/database.yml:20] — Active Record does not recognize `max_connections`; the `RAILS_MAX_THREADS` connection-pool scaling was silently dropped (pool fell back to default). FIXED by renaming to `pool`.
+- [x] [Review][Patch] Production SSL not enabled despite `proxy.ssl: true` in deploy.yml [config/environments/production.rb:28,31] — `config.assume_ssl`/`config.force_ssl` left commented out while Kamal proxy terminates TLS; deploy.yml's own comment requires both. Without them Rails serves over what it treats as plain HTTP (no Secure cookies, no HSTS). FIXED by uncommenting both directives.
+- [x] [Review][Patch] `Procfile.dev` did not start the Solid Queue worker [Procfile.dev] — Dev Notes specify `bin/dev` should launch the worker alongside Rails for local job processing (depended on by Story 1.6). FIXED by adding a `jobs: bin/jobs` process line.
+- [x] [Review][Defer] deploy.yml `DATABASE_URL` secret vs discrete `*_DATABASE_PASSWORD` ENV inconsistency [config/deploy.yml] — deferred, secret wiring for OIDC/SMTP/DB is explicitly later-story scope (Story 1.3/1.6); not actionable now.
+
 ## Change Log
 
+- 2026-06-18: Code review — applied 4 patches (added missing application_system_test_case.rb that was breaking the CI system_test gate; fixed database.yml pool key; enabled production assume_ssl/force_ssl to match Kamal SSL proxy; added Solid Queue worker to Procfile.dev). 1 finding deferred (deploy secret wiring), 10 dismissed as noise/generator-defaults.
 - 2026-06-18: Story 1.1 implementation complete. Generated Rails 8 app with full scaffold: PostgreSQL, Tailwind+daisyUI v5 (no Node), all required gems, 6-gate GitHub Actions CI, Kamal 2+Thruster deploy config, btree_gist migration, i18n structure (en/th), Solid Queue config, ApplicationMailer/ApplicationController scaffolds, lograge initializer. All 36 integration tests pass; RuboCop, Brakeman, bundler-audit all clean.
