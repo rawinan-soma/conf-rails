@@ -109,6 +109,9 @@ begin
       exit_with_error "Checks failed, see #{checks.first_status_url}"
     when "pending"
       attempts += 1
+    else
+      attempts += 1
+      puts "Unknown build state '#{checks.state}', treating as pending..."
     end
 
     exit_with_error "Checks are still pending, gave up after #{MAX_ATTEMPTS * ATTEMPTS_GAP} seconds" if attempts == MAX_ATTEMPTS
