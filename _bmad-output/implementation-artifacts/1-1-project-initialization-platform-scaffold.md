@@ -1,6 +1,10 @@
+---
+baseline_commit: b06da5ce460252672a72dc0f1ac987f0ab82c9e7
+---
+
 # Story 1.1: Project initialization & platform scaffold
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -18,56 +22,56 @@ so that all later stories build on a consistent, secure, no-Node foundation.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Generate Rails 8 application (AC: #1)
-  - [ ] Run `rails new conf-rails --database=postgresql --css=tailwind` with Ruby 4.0.x
-  - [ ] Confirm `config/application.rb` sets `config.time_zone = "Bangkok"` and `config.i18n.default_locale = :en`
-  - [ ] Verify `config/database.yml` uses PostgreSQL
+- [x] Task 1: Generate Rails 8 application (AC: #1)
+  - [x] Run `rails new conf-rails --database=postgresql --css=tailwind` with Ruby 4.0.x
+  - [x] Confirm `config/application.rb` sets `config.time_zone = "Bangkok"` and `config.i18n.default_locale = :en`
+  - [x] Verify `config/database.yml` uses PostgreSQL
 
-- [ ] Task 2: Add daisyUI v5 (no Node) (AC: #1)
-  - [ ] Download `daisyui.mjs` and `daisyui-theme.mjs` to `app/assets/tailwind/` (committed to repo, no CDN at runtime)
-  - [ ] Configure `app/assets/tailwind/application.css` with `@import "tailwindcss"`, `@source not "./daisyui{,*}.mjs"`, `@plugin "./daisyui.mjs"`, `@plugin "./daisyui-theme.mjs"`
-  - [ ] Verify `bin/dev` compiles Tailwind+daisyUI via standalone CLI (no Node/npm required)
+- [x] Task 2: Add daisyUI v5 (no Node) (AC: #1)
+  - [x] Download `daisyui.mjs` and `daisyui-theme.mjs` to `app/assets/tailwind/` (committed to repo, no CDN at runtime)
+  - [x] Configure `app/assets/tailwind/application.css` with `@import "tailwindcss"`, `@source not "./daisyui{,*}.mjs"`, `@plugin "./daisyui.mjs"`, `@plugin "./daisyui-theme.mjs"`
+  - [x] Verify `bin/dev` compiles Tailwind+daisyUI via standalone CLI (no Node/npm required)
 
-- [ ] Task 3: Configure Gemfile with required gems (AC: #1, #2)
-  - [ ] Add runtime gems: `pg`, `omniauth_openid_connect`, `pundit`, `view_component`, `prawn`, `rqrcode`, `solid_queue`, `solid_cache`, `solid_cable`, `tailwindcss-rails`, `lograge`
-  - [ ] Add development/test gems: `i18n-tasks`, `brakeman`, `bundler-audit`, `rubocop-rails-omakase`
-  - [ ] Run `bundle install` and commit `Gemfile.lock`
+- [x] Task 3: Configure Gemfile with required gems (AC: #1, #2)
+  - [x] Add runtime gems: `pg`, `omniauth_openid_connect`, `pundit`, `view_component`, `prawn`, `rqrcode`, `solid_queue`, `solid_cache`, `solid_cable`, `tailwindcss-rails`, `lograge`
+  - [x] Add development/test gems: `i18n-tasks`, `brakeman`, `bundler-audit`, `rubocop-rails-omakase`
+  - [x] Run `bundle install` and commit `Gemfile.lock`
 
-- [ ] Task 4: Set up .gitignore (AC: #1)
-  - [ ] Ensure `.gitignore` excludes `master.key`, `config/credentials/*.key`, `.env*`, `*.pem`
-  - [ ] Verify no credential files are staged
+- [x] Task 4: Set up .gitignore (AC: #1)
+  - [x] Ensure `.gitignore` excludes `master.key`, `config/credentials/*.key`, `.env*`, `*.pem`
+  - [x] Verify no credential files are staged
 
-- [ ] Task 5: Set up GitHub Actions CI workflow (AC: #2)
-  - [ ] Create `.github/workflows/ci.yml`
-  - [ ] Pipeline steps: RuboCop (omakase), Brakeman (fail on high/critical), bundler-audit (fail on high/critical CVE), gitleaks (fail on any detected secret), Minitest
-  - [ ] Ensure `i18n-tasks health` runs in CI
-  - [ ] Confirm build fails on any high/critical Brakeman/CVE finding or detected secret
+- [x] Task 5: Set up GitHub Actions CI workflow (AC: #2)
+  - [x] Create `.github/workflows/ci.yml`
+  - [x] Pipeline steps: RuboCop (omakase), Brakeman (fail on high/critical), bundler-audit (fail on high/critical CVE), gitleaks (fail on any detected secret), Minitest
+  - [x] Ensure `i18n-tasks health` runs in CI
+  - [x] Confirm build fails on any high/critical Brakeman/CVE finding or detected secret
 
-- [ ] Task 6: Configure Kamal 2 + Thruster deploy (AC: #3)
-  - [ ] Set up `config/deploy.yml` for Kamal 2 with Thruster (TLS via Let's Encrypt)
-  - [ ] Configure Dockerfile (Rails 8 default + Thruster)
-  - [ ] Ensure all secrets sourced from ENV/Kamal secrets — never hardcoded in source
-  - [ ] Verify `.gitignore` covers all credential files
+- [x] Task 6: Configure Kamal 2 + Thruster deploy (AC: #3)
+  - [x] Set up `config/deploy.yml` for Kamal 2 with Thruster (TLS via Let's Encrypt)
+  - [x] Configure Dockerfile (Rails 8 default + Thruster)
+  - [x] Ensure all secrets sourced from ENV/Kamal secrets — never hardcoded in source
+  - [x] Verify `.gitignore` covers all credential files
 
-- [ ] Task 7: Enable btree_gist extension (groundwork for Story 2.4)
-  - [ ] Create migration to enable `btree_gist` extension: `enable_extension 'btree_gist'`
-  - [ ] Run `db:migrate` and verify `schema.rb` includes `enable_extension "btree_gist"`
+- [x] Task 7: Enable btree_gist extension (groundwork for Story 2.4)
+  - [x] Create migration to enable `btree_gist` extension: `enable_extension 'btree_gist'`
+  - [x] Run `db:migrate` and verify `schema.rb` includes `enable_extension "btree_gist"`
 
-- [ ] Task 8: Initialize i18n structure (AC: #1, groundwork for Story 1.2)
-  - [ ] Create `config/locales/en.yml` with root structure (at minimum `en: {}`)
-  - [ ] Create `config/locales/th.yml` as key-for-key mirror (Thai translation scaffold — Rawinan fills in)
-  - [ ] Configure `config/application.rb`: `config.i18n.available_locales = [:en, :th]`
+- [x] Task 8: Initialize i18n structure (AC: #1, groundwork for Story 1.2)
+  - [x] Create `config/locales/en.yml` with root structure (at minimum `en: {}`)
+  - [x] Create `config/locales/th.yml` as key-for-key mirror (Thai translation scaffold — Rawinan fills in)
+  - [x] Configure `config/application.rb`: `config.i18n.available_locales = [:en, :th]`
 
-- [ ] Task 9: Configure Solid Queue (groundwork for Story 1.6)
-  - [ ] Ensure `config/queue.yml` exists for Solid Queue configuration
-  - [ ] Create `config/recurring.yml` stub (jobs added in Story 1.6)
-  - [ ] Scaffold `app/mailers/application_mailer.rb` with `default from: -> { I18n.t('mailers.sender_display') }` (actual sender display name wired in Story 1.6)
-  - [ ] Scaffold `app/controllers/application_controller.rb` inheriting `ActionController::Base` — do NOT add `verify_authorized` here (that is Story 1.4); just the minimal base
+- [x] Task 9: Configure Solid Queue (groundwork for Story 1.6)
+  - [x] Ensure `config/queue.yml` exists for Solid Queue configuration
+  - [x] Create `config/recurring.yml` stub (jobs added in Story 1.6)
+  - [x] Scaffold `app/mailers/application_mailer.rb` with `default from: -> { I18n.t('mailers.sender_display') }` (actual sender display name wired in Story 1.6)
+  - [x] Scaffold `app/controllers/application_controller.rb` inheriting `ActionController::Base` — do NOT add `verify_authorized` here (that is Story 1.4); just the minimal base
 
-- [ ] Task 10: Smoke test — boot and CI pass (AC: #1, #2)
-  - [ ] Verify `bin/dev` boots the app with no errors
-  - [ ] Verify `bin/rubocop`, `bin/brakeman`, `bundler-audit`, `bundle exec rails test` all pass locally
-  - [ ] Verify `gitleaks` scan finds no secrets
+- [x] Task 10: Smoke test — boot and CI pass (AC: #1, #2)
+  - [x] Verify `bin/dev` boots the app with no errors
+  - [x] Verify `bin/rubocop`, `bin/brakeman`, `bundler-audit`, `bundle exec rails test` all pass locally
+  - [x] Verify `gitleaks` scan finds no secrets
 
 ## Dev Notes
 
@@ -250,6 +254,90 @@ claude-sonnet-4-6
 
 ### Debug Log References
 
+- Ruby 4.0.x has stricter regex literal parsing with `|` operator; fixed pre-existing test syntax issue in test/integration/project_scaffold_test.rb (line 160 — wrapped regex in variable to avoid parse ambiguity)
+- PostgreSQL server not running locally; used existing twhp-postgres Docker container on port 5433 for db:migrate
+- `config.autoload_lib` array bracket spacing fixed via `rubocop -A`
+
 ### Completion Notes List
 
+- Generated Rails 8.1.3 app with PostgreSQL + Tailwind CSS (no Node/npm) using `rails new` with Ruby 4.0.5
+- Configured `config/application.rb`: `time_zone = "Bangkok"`, `i18n.default_locale = :en`, `i18n.available_locales = [:en, :th]`
+- Downloaded daisyUI v5.5.23 (`daisyui.mjs` + `daisyui-theme.mjs`) committed to `app/assets/tailwind/` — no CDN, no npm
+- Updated `app/assets/tailwind/application.css` with all four required directives
+- Verified `rails tailwindcss:build` outputs `daisyUI 5.5.23` — no Node/npm required
+- Added all required runtime gems (omniauth_openid_connect, pundit, view_component, prawn, rqrcode, lograge) and dev/test gems (i18n-tasks, brakeman, bundler-audit) to Gemfile
+- .gitignore pre-configured with `config/master.key`, `config/credentials/*.key`, `.env`, `.env.*`, `*.pem`
+- Created `.github/workflows/ci.yml` with all 6 required gates: RuboCop, Brakeman, bundler-audit, gitleaks (via gitleaks/gitleaks-action@v2), Minitest, i18n-tasks health
+- Rewrote `config/deploy.yml` for Kamal 2 with Thruster proxy (TLS/Let's Encrypt), all secrets referenced via Kamal secrets/ENV — no hardcoded values
+- Dockerfile uses Rails 8 default multi-stage build + Thruster (`./bin/thrust`)
+- Created migration `20260618163503_enable_btreegist.rb` — ran `db:migrate`, `schema.rb` now includes `enable_extension "btree_gist"`
+- Created `config/locales/en.yml` and `config/locales/th.yml` (key-mirror stub) — normalized via `i18n-tasks normalize`
+- `config/queue.yml` and `config/recurring.yml` auto-generated by `solid_queue:install`
+- Scaffolded `ApplicationMailer` with `default from: -> { I18n.t("mailers.sender_display") }`
+- `ApplicationController` minimal (no Pundit — that is Story 1.4)
+- Created `config/initializers/lograge.rb` for structured JSON logging
+- All 36 integration tests pass; 0 RuboCop offenses; 0 Brakeman warnings; 0 CVEs (bundler-audit); i18n-tasks health clean
+
 ### File List
+
+- Gemfile
+- Gemfile.lock
+- Rakefile
+- README.md
+- config.ru
+- Dockerfile
+- Procfile.dev
+- .gitignore
+- .rubocop.yml
+- .ruby-version
+- .dockerignore
+- config/application.rb
+- config/boot.rb
+- config/routes.rb
+- config/database.yml
+- config/queue.yml
+- config/recurring.yml
+- config/cable.yml
+- config/cache.yml
+- config/importmap.rb
+- config/deploy.yml
+- config/environment.rb
+- config/environments/development.rb
+- config/environments/production.rb
+- config/environments/test.rb
+- config/initializers/assets.rb
+- config/initializers/content_security_policy.rb
+- config/initializers/filter_parameter_logging.rb
+- config/initializers/inflections.rb
+- config/initializers/lograge.rb
+- config/locales/en.yml
+- config/locales/th.yml
+- db/migrate/20260618163503_enable_btreegist.rb
+- db/schema.rb
+- db/seeds.rb
+- db/cable_schema.rb
+- db/cache_schema.rb
+- db/queue_schema.rb
+- app/assets/tailwind/application.css
+- app/assets/tailwind/daisyui.mjs
+- app/assets/tailwind/daisyui-theme.mjs
+- app/controllers/application_controller.rb
+- app/mailers/application_mailer.rb
+- app/views/layouts/application.html.erb
+- app/views/layouts/mailer.html.erb
+- app/views/layouts/mailer.text.erb
+- bin/dev
+- bin/jobs
+- bin/rails
+- bin/setup
+- bin/thrust
+- .github/workflows/ci.yml
+- .kamal/secrets
+- test/integration/project_scaffold_test.rb
+- test/system/platform_scaffold_system_test.rb
+- test/test_helper.rb
+- test/application_system_test_case.rb
+
+## Change Log
+
+- 2026-06-18: Story 1.1 implementation complete. Generated Rails 8 app with full scaffold: PostgreSQL, Tailwind+daisyUI v5 (no Node), all required gems, 6-gate GitHub Actions CI, Kamal 2+Thruster deploy config, btree_gist migration, i18n structure (en/th), Solid Queue config, ApplicationMailer/ApplicationController scaffolds, lograge initializer. All 36 integration tests pass; RuboCop, Brakeman, bundler-audit all clean.
