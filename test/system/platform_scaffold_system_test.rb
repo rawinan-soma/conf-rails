@@ -3,8 +3,13 @@
 # ATDD Red-Phase System Tests — Story 1.1: Project Initialization & Platform Scaffold
 #
 # TDD RED PHASE: All tests are skipped until implementation is complete.
-# These system tests use Capybara + Selenium to verify the Rails app boots and
-# renders daisyUI/Tailwind CSS correctly without Node/npm.
+# These system tests use Capybara rack_test driver (not Selenium) to verify the Rails
+# app boots and renders daisyUI/Tailwind CSS correctly without Node/npm.
+#
+# We use driven_by :rack_test for these boot/CSS smoke tests because:
+#   1. rack_test supports page.status_code (Selenium does not)
+#   2. These tests check configuration, not JavaScript behaviour
+#   3. rack_test is faster (no browser launch) — ideal for CI smoke tests
 #
 # To activate: remove the `skip` call for the task you are currently implementing,
 # run `bundle exec rails test test/system/platform_scaffold_system_test.rb`,
@@ -16,6 +21,8 @@
 require "application_system_test_case"
 
 class PlatformScaffoldSystemTest < ApplicationSystemTestCase
+  driven_by :rack_test
+
   # ---------------------------------------------------------------------------
   # AC-1: Application boots and serves HTTP 200 (P0, R-010)
   # ---------------------------------------------------------------------------
