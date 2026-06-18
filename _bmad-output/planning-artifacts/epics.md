@@ -189,6 +189,8 @@ Hotwire / daisyUI / Solid Queue) that every later epic builds on.
 
 ### Story 1.1: Project initialization & platform scaffold
 
+**GH Issue:** #1
+
 As a developer,
 I want the Rails 8 project initialized with the agreed stack, styling, and CI,
 So that all later stories build on a consistent, secure, no-Node foundation.
@@ -215,6 +217,8 @@ omniauth_openid_connect, prawn, rqrcode, i18n-tasks, brakeman, bundler-audit.
 **Then** a Dockerized Kamal 2 + Thruster setup exists with secrets sourced from ENV/credentials (no secrets in source)
 
 ### Story 1.2: Core design system & ViewComponent UI library
+
+**GH Issue:** #2
 
 As an internal user,
 I want a branded, accessible, Thai-ready interface shell and reusable components,
@@ -243,6 +247,8 @@ skeleton, empty-state, app shell + admin-sidebar). Feature-specific components
 
 ### Story 1.3: OIDC authentication & sessions
 
+**GH Issue:** #3
+
 As an internal user,
 I want to sign in through my organization's identity provider,
 So that I access the app with my existing org account and no separate password.
@@ -265,6 +271,8 @@ User by IdP subject; email from OIDC claim (read-only). 30-min fixed inactivity 
 **Then** the user sees a clear error and no session is created
 
 ### Story 1.4: Capacities, admin role & Pundit authorization baseline
+
+**GH Issue:** #4
 
 As the system,
 I want every internal user to be organizer+attendee by default with admin as the only elevated role, enforced by policies,
@@ -290,6 +298,8 @@ manage-own-only, admin read-all, no booking approval authority. Role-grant UI is
 
 ### Story 1.5: First-login profile completion
 
+**GH Issue:** #5
+
 As an internal user,
 I want to complete my profile on first login,
 So that my identity prefills registrations and the registration-page contact.
@@ -313,6 +323,8 @@ OIDC. First-login gate blocks the app until required fields are complete.
 **Then** changes save and propagate live wherever the profile is used
 
 ### Story 1.6: Email & background-job infrastructure
+
+**GH Issue:** #6
 
 As the system,
 I want outbound email sent asynchronously over the org SMTP, decoupled from request transactions,
@@ -346,6 +358,8 @@ create/edit/duplicate/cancel bookings with a database-guaranteed no-double-booki
 
 ### Story 2.1: Room inventory management (admin)
 
+**GH Issue:** #7
+
 As an admin,
 I want to add, edit, and deactivate rooms,
 So that organizers can only book rooms that currently exist and are active.
@@ -370,6 +384,8 @@ optional, features multi-select). Deactivated rooms are excluded from booking/ca
 
 ### Story 2.2: Room time-slot blocking (admin)
 
+**GH Issue:** #8
+
 As an admin,
 I want to block time slots on a room for maintenance or reserved use,
 So that those slots cannot be booked.
@@ -388,6 +404,8 @@ So that those slots cannot be booked.
 **Then** the system rejects it with a clear message listing the conflict
 
 ### Story 2.3: Room calendar — week scheduler
+
+**GH Issue:** #9
 
 As an organizer,
 I want a week view of all rooms with their availability,
@@ -412,6 +430,8 @@ empty day cell is clickable (no preset time) and starts a booking. No day view.
 **Then** the Event Detail view opens (read-only event info)
 
 ### Story 2.4: Create a booking with atomic conflict detection
+
+**GH Issue:** #10
 
 As an organizer,
 I want to create a booking in one unified form that can never double-book a room,
@@ -442,6 +462,8 @@ link (token). Booking confirmation email via the Epic 1 mailer (FR-082 entry).
 
 ### Story 2.5: Edit, duplicate & cancel a booking
 
+**GH Issue:** #11
+
 As an organizer,
 I want to edit, duplicate, or cancel my own bookings (including the catering toggle),
 So that I can manage events and reuse past setups.
@@ -470,6 +492,8 @@ emails registered attendees.
 **Then** a new booking form is pre-filled with its details (closing date reset, a fresh registration link generated on save)
 
 ### Story 2.6: Room deactivation cascade
+
+**GH Issue:** #12
 
 As an admin,
 I want deactivating a room with future bookings to safely cancel and notify,
@@ -502,6 +526,8 @@ organizers manage registrants; everyone can self-cancel. The product's core valu
 
 ### Story 3.1: Registration settings & close lifecycle
 
+**GH Issue:** #13
+
 As an organizer,
 I want to control whether and until when registration is open,
 So that I collect attendees within the right window.
@@ -526,6 +552,8 @@ in-flight rejection; uncapped.
 **Then** the page shows a clear "registration closed" message and no new registration is accepted
 
 ### Story 3.2: External registration (public token page)
+
+**GH Issue:** #14
 
 As an external guest,
 I want to register for an event from a branded page without an account,
@@ -552,6 +580,8 @@ length-capped + sanitized. Target ≤2 min.
 
 ### Story 3.3: External self-cancel & confirmation resend
 
+**GH Issue:** #15
+
 As an external registrant,
 I want to cancel my registration or recover a lost confirmation by link/email,
 So that I can manage my attendance without an account.
@@ -570,6 +600,8 @@ Resend: neutral acknowledgement regardless of match (no enumeration); constant-i
 **Then** the same neutral acknowledgement is shown whether or not a registration exists, and if it exists the confirmation (with cancel link) is resent
 
 ### Story 3.4: Internal in-app registration
+
+**GH Issue:** #16
 
 As an internal user,
 I want to register to attend a colleague's event from inside the app with no form,
@@ -597,6 +629,8 @@ event details only.
 
 ### Story 3.5: Meal-type aggregation
 
+**GH Issue:** #17
+
 As an organizer (and admin),
 I want per-meal-type counts aggregated from registrant choices,
 So that I can order catering accurately.
@@ -616,6 +650,8 @@ registrants with no meal type (registered while catering off — see FR-023).
 
 ### Story 3.6: Registrant list & status
 
+**GH Issue:** #18
+
 As an organizer,
 I want to see the list of registrants for my event with their status,
 So that I know who is coming.
@@ -634,6 +670,8 @@ via Pundit.
 **Then** access is denied (event details remain viewable for registering, but not registrant data)
 
 ### Story 3.7: Sign-in sheet PDF & event QR code
+
+**GH Issue:** #19
 
 As an organizer,
 I want a printable sign-in sheet and an event QR code,
@@ -655,6 +693,8 @@ cancelled) attendees; point-in-time snapshot.
 
 ### Story 3.8: One-day-before reminder
 
+**GH Issue:** #20
+
 As a registered attendee and organizer,
 I want a reminder the day before the event,
 So that no one forgets.
@@ -674,6 +714,8 @@ registrant/event); recipients = registered attendees + organizer.
 **Then** no duplicate reminder is sent
 
 ### Story 3.9: Organizer dashboard
+
+**GH Issue:** #21
 
 As an organizer,
 I want a dashboard of my upcoming bookings with key info and actions,
@@ -702,6 +744,8 @@ the admin role.
 
 ### Story 4.1: Utilization heatmap
 
+**GH Issue:** #22
+
 As an admin,
 I want a utilization heatmap of bookings per room per month,
 So that I can see usage at a glance.
@@ -721,6 +765,8 @@ hover tooltip in MVP; ≤30s comprehension target.
 
 ### Story 4.2: Bulk calendar (all rooms)
 
+**GH Issue:** #23
+
 As an admin,
 I want a calendar of all bookings across all rooms,
 So that I can see the whole schedule.
@@ -734,6 +780,8 @@ So that I can see the whole schedule.
 **Then** all bookings across all rooms are displayed in one view
 
 ### Story 4.3: CSV export of booking & registrant data
+
+**GH Issue:** #24
 
 As an admin,
 I want to export booking and registrant data as CSV,
@@ -753,6 +801,8 @@ neutralized; define columns and whether cancelled/duplicate registrants are incl
 **Then** its columns and inclusion rules (e.g. cancelled registrants) are documented and consistent
 
 ### Story 4.4: Audit log
+
+**GH Issue:** #25
 
 As an admin,
 I want an audit log of bookings, cancellations, and modifications,
@@ -774,6 +824,8 @@ the epics that produce them; this story delivers the model + viewer.)
 
 ### Story 4.5: SMTP settings configuration
 
+**GH Issue:** #26
+
 As an admin,
 I want to configure the SMTP settings in-app,
 So that outbound email uses the org's mail server without a redeploy.
@@ -793,6 +845,8 @@ these settings.
 **Then** access is denied (403)
 
 ### Story 4.6: Admin role assignment
+
+**GH Issue:** #27
 
 As an admin,
 I want to grant or revoke the admin role for internal users,
