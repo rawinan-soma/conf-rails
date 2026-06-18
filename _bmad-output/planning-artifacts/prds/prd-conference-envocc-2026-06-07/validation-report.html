@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PRD Validation: ENVOCC Conference Room Booking System</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --muted: #78716c;
+
+    --verdict-strong: #16a34a;
+    --verdict-adequate: #65a30d;
+    --verdict-thin: #d97706;
+    --verdict-broken: #dc2626;
+
+    --sev-low: #64748b;
+    --sev-medium: #ca8a04;
+    --sev-high: #ea580c;
+    --sev-critical: #dc2626;
+
+    --grade-exc: #16a34a;
+    --grade-good: #65a30d;
+    --grade-fair: #d97706;
+    --grade-poor: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  header.report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .title h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .title .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .grade {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .grade-excellent { background: var(--grade-exc); }
+  .grade-good { background: var(--grade-good); }
+  .grade-fair { background: var(--grade-fair); }
+  .grade-poor { background: var(--grade-poor); }
+
+  .synthesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    font-size: 15.5px;
+  }
+  .synthesis p { margin: 0 0 10px; }
+  .synthesis p:last-child { margin-bottom: 0; }
+
+  .dimension-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .dim-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .dim-card .dim-name { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .dim-card .dim-verdict { font-size: 14px; font-weight: 600; }
+
+  section.dimension, section.reviewer-section { margin-bottom: 14px; }
+  section.dimension details, section.reviewer-section details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  section summary {
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  section summary::-webkit-details-marker { display: none; }
+  section summary::before {
+    content: "▸";
+    display: inline-block;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+  }
+  section details[open] summary::before { transform: rotate(90deg); }
+  section summary h2 {
+    display: inline;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    flex: 1;
+  }
+  .verdict-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: white;
+  }
+  .verdict-strong { background: var(--verdict-strong); }
+  .verdict-adequate { background: var(--verdict-adequate); }
+  .verdict-thin { background: var(--verdict-thin); }
+  .verdict-broken { background: var(--verdict-broken); }
+
+  .dim-body { padding: 4px 20px 18px; }
+  .dim-judgment { color: var(--text); font-size: 14.5px; }
+  .dim-judgment p { margin: 0 0 10px; }
+
+  .findings-list { padding: 0 20px 4px; }
+  article.finding {
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+  article.finding:first-child { border-top: none; }
+  article.finding header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .badge {
+    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .badge-sev-low { background: rgba(100, 116, 139, 0.12); color: var(--sev-low); }
+  .badge-sev-medium { background: rgba(202, 138, 4, 0.14); color: var(--sev-medium); }
+  .badge-sev-high { background: rgba(234, 88, 12, 0.14); color: var(--sev-high); }
+  .badge-sev-critical { background: rgba(220, 38, 38, 0.14); color: var(--sev-critical); }
+  .finding-title { margin: 0; font-size: 15px; font-weight: 500; flex: 1; min-width: 200px; }
+  .finding-location { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--muted); }
+  .finding-note, .finding-fix { margin-top: 6px; font-size: 14px; }
+  .finding-fix strong { color: var(--muted); font-weight: 500; }
+
+  .reviewer-source {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .mechanical {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 24px;
+    font-size: 14px;
+  }
+  .mechanical h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mechanical ul { margin: 0; padding-left: 20px; }
+  .mechanical li { margin-bottom: 4px; color: var(--text); }
+
+  footer.report-footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  footer .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="report-header">
+      <div class="title">
+        <h1>ENVOCC Conference Room Booking System — Validation Report</h1>
+        <div class="subtitle">_bmad-output/planning-artifacts/prds/prd-conference-envocc-2026-06-07/prd.md</div>
+      </div>
+      <div class="grade grade-fair">Fair</div>
+    </header>
+
+    <div class="synthesis">
+      <p>This is a tight, internally consistent PRD that knows exactly what it is: a security-driven full replacement of a fragmented two-app booking + registration system for a single organization. Its strongest assets are <strong>done-ness clarity</strong> and <strong>downstream usability</strong> — FRs are granular, ID-stable, and cross-referenced through a coherent role model that resolves the hard role edge cases (FR-094 RBAC, FR-063 room-deactivation cascade, F11 internal vs. external registration). On the rubric alone it sits in "Good" territory: no broken dimension, one thin dimension (scope honesty), one high finding (NFR-003).</p>
+      <p>The grade drops to <strong>Fair</strong> because the adversarial pass materially shifts the picture: it surfaced <strong>6 critical and 9 high implementation-readiness gaps</strong>. The headline reliability claim ("100% / 0 double-bookings", NFR-002) is currently both unimplementable and untestable as written — FR-011→FR-004 is a textbook check-then-insert race with no atomic guarantee (C-1, C-2). Time-sensitive logic (registration close FR-034, reminders FR-037) names no timezone or fire time (C-3); email-delivery failure is unhandled despite the confirmation email being the registrant's only artifact and cancellation path (C-4); duplicate registration by the same email is never prevented (C-6); and "Attended" (FR-035) is a dead enum no FR ever sets (H-6). These are gaps of under-specification rather than structural defects — exactly the material the architecture and correct-course phases exist to resolve — but they should be closed before downstream work leans on them. Note also the stale identity: frontmatter still reads <code>project_name: conference-envocc</code> inside a project called <code>conf-rails</code> (M-2).</p>
+    </div>
+
+    <div class="dimension-summary">
+      <div class="dim-card"><div class="dim-name">Decision-readiness</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+      <div class="dim-card"><div class="dim-name">Substance over theater</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">Strategic coherence</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">Done-ness clarity</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+      <div class="dim-card"><div class="dim-name">Scope honesty</div><div class="dim-verdict" style="color: var(--verdict-thin)">thin</div></div>
+      <div class="dim-card"><div class="dim-name">Downstream usability</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">Shape fit</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+    </div>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Decision-readiness</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>The PRD states decisions as decisions, not considerations: meal-type ownership is pushed to the registrant (FR-021), admins are stripped of approval authority in three places (§3, FR-094, Constraints), and the resent-confirmation flow names the security trade-off it accepts (FR-047). Where it is merely adequate: there is no Open Questions section and no <code>[NOTE FOR PM]</code> callouts, yet FR-095 references "resolves OQ-3" — an open-question artifact that does not exist in the document, so the resolution is unverifiable in context. It also smooths over the uncapped-registration vs. room-capacity tension (FR-032 / FR-061) without flagging it as a contestable trade-off.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Dangling reference to OQ-3 with no Open Questions section</h3><span class="finding-location">FR-095</span></header>
+            <div class="finding-note">"resolves OQ-3" implies a tracked open question, but no OQ list exists, so the resolution cannot be audited and the prior tension is invisible.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a short "Resolved Questions" subsection restating OQ-1..OQ-3, or drop the OQ-3 reference and state the decision plainly.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Uncapped-registration vs. room-capacity tension not surfaced as a decision</h3><span class="finding-location">FR-032, FR-061, Constraints</span></header>
+            <div class="finding-note">Keeping an informational <code>capacity</code> field while never enforcing it is reasonable but presented as settled fact, not a trade-off a facilities stakeholder might contest.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a one-line <code>[NOTE FOR PM]</code> acknowledging capacity is intentionally non-binding and why.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Substance over theater</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Almost nothing reads as furniture. §3 defines exactly three roles, each driving concrete FRs — no persona theater. There is no Differentiation/Innovation section, the correct restraint for an internal replacement tool. The Problem Statement is specific to ENVOCC ("unsupported frameworks with active security vulnerabilities") and could not be swapped into another PRD unchanged. The one soft spot is NFR phrasing (covered under Done-ness): NFR-001/NFR-002 sit close to boilerplate wording. Overall the content is earned, not decorative.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Strategic coherence</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>A clear thesis — unify two fragmented apps into one secure organizer workflow, give external attendees a real self-service channel, give admins visibility without gatekeeping — and the features follow from it (dual-capacity account model §3, unified booking form FR-010, "no approval authority" stance). Success Metrics test the thesis rather than vanity activity (task completion ≥80%, external completion ≥90%, ≤2-minute completion, 0 double-bookings); no DAU/MAU filler. The Out-of-Scope list reinforces the arc. The only gap: no counter-metrics are stated.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">No counter-metrics named alongside Success Metrics</h3><span class="finding-location">§2</span></header>
+            <div class="finding-note">No guardrail that the ≥90% external completion target isn't bought by collecting too little data or an over-permissive flow.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add one counter-metric (e.g., registration error/abandonment rate, or support requests for lost confirmation emails).</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Done-ness clarity</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>The functional side is strong — most FRs carry a testable consequence (FR-004/NFR-002 binary double-booking condition, FR-037 single fixed reminder, FR-041/FR-041a exact fields with conditional "Other" reveal, FR-082 full email trigger/recipient table). Role and registration edge cases (FR-063 cascade, FR-094 RBAC, F11) are specified to a story-authorable level. The weakness is concentrated in NFRs: NFR-003's "normal organizational load" is undefined, and NFR-001's "stored securely" is an adjective with no bound. NFR-004 is genuinely good and testable.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">"Normal organizational load" is undefined</h3><span class="finding-location">NFR-003</span></header>
+            <div class="finding-note">A 3-second bound is meaningless without the concurrency/volume it holds at; downstream architecture and performance testing cannot size against it.</div>
+            <div class="finding-fix"><strong>Fix:</strong> State the load envelope (N active rooms, P concurrent organizers, Q registrants/min) the 3s target must hold under.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">"Stored securely" is an adjective, not a bound</h3><span class="finding-location">NFR-001</span></header>
+            <div class="finding-note">Leaves encryption-at-rest, hashing, and token storage to interpretation on a PRD whose entire premise is security.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Specify the mechanism (named hashing algorithm, hashed/short-lived tokens, TLS in transit) or defer explicitly to the architecture spec by reference.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">No explicit acceptance section; relies on FR consequences</h3><span class="finding-location">§4–§5</span></header>
+            <div class="finding-note">Works for well-specified FRs but the NFRs have no pass/fail line of their own.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Accept (FR consequences suffice) or add a one-line acceptance note per NFR.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details open>
+        <summary>
+          <h2>Scope honesty</h2>
+          <span class="verdict-pill verdict-thin">thin</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>The "final/settled" posture works against the PRD here. The §7 Out-of-Scope list does real work — seven concrete deferrals, not hand-waving. But the rest of the scope-honesty scaffolding is absent: zero <code>[ASSUMPTION]</code> tags and no Assumptions Index, zero <code>[NON-GOAL for MVP]</code> inline callouts, zero <code>[NOTE FOR PM]</code> markers — yet the PRD clearly rests on inferences (OIDC per FR-095, 30-minute session default FR-093, "normal organizational load", indefinite retention). Zero assumption tags combined with the dangling "resolves OQ-3" reference suggests open items were resolved and then erased rather than recorded. The defaults are reasonable, so this is thin rather than broken — the risk is auditability, not correctness.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">No Assumptions Index and no inline [ASSUMPTION] tags despite clear inferred defaults</h3><span class="finding-location">FR-093, FR-095, NFR-003, NFR-005</span></header>
+            <div class="finding-note">A downstream reader can't tell confirmed requirements from PM inferences.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Tag inferred defaults inline and collect them in an Assumptions Index; mark any the user explicitly confirmed as confirmed.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">No [NON-GOAL for MVP] inline callouts where silent omission is possible</h3><span class="finding-location">FR-032, FR-014, Constraints</span></header>
+            <div class="finding-note">§7 covers most, but Constraints and FRs most likely to invite "but what about…" could each carry a pointer.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add brief inline non-goal pointers at FR-032 (capacity) and FR-014 (duplication vs. templates).</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Downstream usability</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Built to be source-extracted. FR IDs are unique and cross-references resolve cleanly and pervasively (FR-040↔FR-095, FR-021↔FR-041a, FR-063↔FR-082, F11 FR-100..105 → FR-022/035/036/082), using specific IDs rather than "see above". Domain nouns hold their meaning across FRs, the email table, and §3. Two minor gaps: no formal Glossary (§3's role model serves as one), and deliberate FR numbering gaps (FR-034b, FR-041a) could confuse a tool that assumes contiguity.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">No explicit Glossary section</h3><span class="finding-location">§3</span></header>
+            <div class="finding-note">Terminology is consistent but not codified, so a UX/architecture extractor has no single source for domain nouns.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a short Glossary (organizer/attendee capacity, owning organizer, registered attendee, external registrant, blocked slot, registration close).</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Shape fit</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>The PRD matches its product — a hybrid internal multi-stakeholder tool (organizers, admins) plus an external-facing consumer-style registration flow. The internal side is a capability spec (FR lists by feature area); the external side gets the UX-load-bearing treatment it needs (branded page FR-040, mobile/desktop equal priority NFR-004, WCAG 2.1 AA on public pages NFR-007, ≤2-minute target). Not over-formalized: no ceremonial User Journeys, appropriate for single-operator-per-task internal work, and the external FR sequence (FR-040..047) functions as the journey. As a brownfield full-replacement it states existing-system references accurately and defers UX detail to the named UX spec. No shape-fit findings.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="reviewer-section">
+      <details open>
+        <summary>
+          <h2>Adversarial review — implementation-readiness</h2>
+          <span class="reviewer-source">review-adversarial-general.md</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Not implementation-ready as written. The PRD reads well but defers nearly every hard distributed-systems decision (concurrency, time, delivery, dedup) to the implementer, and its flagship reliability claim is currently both unimplementable and untestable. <strong>Severity counts: 6 critical, 9 high, 11 medium, 7 low (33 total).</strong> The 6 critical + 9 high are listed below; the 18 medium/low findings are in <code>review-adversarial-general.md</code>.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-1 — Conflict detection has no concurrency/race-condition spec</h3><span class="finding-location">FR-004, FR-011, NFR-002, Goal 4</span></header>
+            <div class="finding-note">"Check availability then insert" is a textbook time-of-check-to-time-of-use race. The "100%" guarantee is unimplementable without a locking strategy and untestable — no concurrent-case test, no loser-of-race UX.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Mandate an atomic guarantee at the persistence layer (DB exclusion/overlap constraint), specify the loser-of-race UX, and define the concurrency test that validates "100%".</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-2 — "Overlapping time slots" never defined; boundary semantics unspecified</h3><span class="finding-location">FR-004</span></header>
+            <div class="finding-note">Is 09:00–10:00 in conflict with 10:00–11:00? Half-open vs. closed intervals give different answers. No buffer rules; zero-duration / end-before-start not rejected.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Define intervals as half-open [start, end), state adjacent bookings do not conflict, add validation for end &gt; start and minimum duration.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-3 — Timezone &amp; date-boundary behavior unspecified across all time-sensitive logic</h3><span class="finding-location">FR-033, FR-034, FR-037, FR-093, NFR-006</span></header>
+            <div class="finding-note">"End of that date" — in whose timezone? "1 day before" — 24h before start, or a fixed clock time on the prior day? Off-by-a-day bugs that ship silently.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Declare a canonical timezone (Asia/Bangkok). Define "end of date" as 23:59:59 in that zone and the reminder fire time precisely (e.g., 09:00 the prior calendar day).</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-4 — Email delivery failure handling completely absent</h3><span class="finding-location">FR-013, FR-016, FR-042, FR-080, FR-082</span></header>
+            <div class="finding-note">SMTP-only with no managed retry layer, yet zero spec for SMTP down/reject/timeout. The confirmation email is the registrant's only artifact and carries the sole cancellation link — silent failure leaves them with no record and no recovery.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add retry policy + failure visibility + queue/status; decouple registration commit from email send; define dead-letter/alert and registrant recovery.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-5 — Manual close / cancel of in-flight registrations undefined</h3><span class="finding-location">FR-034b, FR-015, FR-063, FR-104</span></header>
+            <div class="finding-note">What happens to a registration in-flight when the organizer closes/cancels, or an admin deactivates the room? No ordering rule → registrations attached to cancelled events, emails for events that no longer exist, counts that disagree with reality.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Make close/cancel transactional; reject any registration not committed before the close timestamp with the standard "closed" message; define behavior for registrations committed just before cancel.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">C-6 — Duplicate registration by the same email never addressed</h3><span class="finding-location">FR-041, FR-042, FR-047, FR-101, FR-105</span></header>
+            <div class="finding-note">FR-047 assumes one registration per email, but nothing prevents the same email registering many times — inflating counts, catering aggregation, and the sign-in sheet, and making resend ambiguous. Compounded by an organizer self-registering both internally and externally.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Enforce uniqueness on (event, email) for external registrations and reconcile internal vs. external by the same person; if duplicates are intentional, define which link FR-047 resends.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-1 — Untestable/vague NFR thresholds with no verification method</h3><span class="finding-location">NFR-001, NFR-003, NFR-004</span></header>
+            <div class="finding-note">"Normal organizational load" has no number; "securely" is unverifiable; "no critical/high vulnerabilities" needs a defined scanner and CVSS cutoff.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Quantify load (p95 ≤ 3s with N users, M-booking dataset); name the scanner/standard + CVSS threshold; replace "stored securely" with concrete requirements.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-2 — "100% accuracy" / "0 incidents" is not a measurable success metric</h3><span class="finding-location">Goal 4, Success Metrics, NFR-002</span></header>
+            <div class="finding-note">Zero observed incidents is lagging and unfalsifiable — you can only ever fail it; a single unobserved race passes undetected.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Convert to a verification criterion (K simultaneous overlapping submissions → exactly one success, K-1 rejections); keep the production "0" as a monitoring KPI, not an acceptance gate.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-3 — Self-cancellation token security &amp; lifetime unspecified</h3><span class="finding-location">FR-043, FR-044, FR-092, NFR-001</span></header>
+            <div class="finding-note">No token entropy, expiry, single-use vs. reusable, or post-cancellation state. A weak/non-expiring token lets anyone cancel or enumerate registrations.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Specify cryptographically-random ≥128-bit tokens, single-use cancellation semantics, expiry tied to event lifecycle, and the post-cancellation state.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-4 — Resend anti-enumeration claimed but other surfaces leak</h3><span class="finding-location">FR-047 vs. FR-051, FR-072</span></header>
+            <div class="finding-note">Good intent, inconsistent threat model: timing leaks, dashboard registrant count, and an undefined "already registered" response on the submit path undermine the neutral-acknowledgement posture.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Require the registration submit path to also not distinguish "already registered" to anonymous users; require constant-time-ish resend behavior.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-5 — Auto-close / reminder scheduling mechanism &amp; reliability undefined</h3><span class="finding-location">FR-033, FR-037, FR-082</span></header>
+            <div class="finding-note">Time-triggered jobs with no spec for how they fire, what happens if the job server is down at trigger time, or whether reminders are idempotent — risky given fragile SMTP-only delivery.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Specify scheduling approach, missed-run recovery (catch-up vs. skip), and idempotency (at most one reminder per registrant per event).</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-6 — "Attended" status has no defined transition mechanism</h3><span class="finding-location">FR-035, FR-036, FR-038</span></header>
+            <div class="finding-note">The data model includes "Attended" but nothing sets it — no check-in FR despite a sign-in sheet and QR code. A dead enum an implementer cannot build.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add an attendance-marking FR (organizer marks on the registrant list, or QR-based self check-in), or remove "Attended" from FR-035.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-7 — Catering toggled off after registrations exist — meal-data fate undefined</h3><span class="finding-location">FR-021, FR-022, FR-023, FR-041a</span></header>
+            <div class="finding-note">Toggling catering off (then maybe on) leaves collected meal selections and aggregated counts in an undefined state; re-enabling creates registrants with null meal types inside an aggregation that assumes a value.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Define meal-type data lifecycle across toggle transitions and the aggregation/display behavior for registrants with no meal type.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-8 — Organizer profile contact propagation conflicts with read-only per-event contact</h3><span class="finding-location">FR-040, FR-095</span></header>
+            <div class="finding-note">Contact is pulled live from a profile the user can edit later. If the organizer changes their phone after a booking, does the published registration page change retroactively? Snapshot vs. live is never stated.</div>
+            <div class="finding-fix"><strong>Fix:</strong> State whether the contact is snapshotted at booking creation or resolved live, and the consequence for already-published pages.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">H-9 — Internal-user-as-both-organizer-and-registrant edge cases under-specified</h3><span class="finding-location">FR-094, FR-100, FR-105, FR-035</span></header>
+            <div class="finding-note">Organizer-as-registrant appears in a list they manage; do they receive the cancellation email they themselves trigger? Does admin read-all override the "cannot see registrant list" restriction when an admin views another's event to register?</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a short conflict-resolution matrix for organizer-as-registrant and admin-as-registrant/viewer, including self-notification suppression.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <div class="mechanical">
+      <h3>Mechanical notes</h3>
+      <ul>
+        <li><strong>Stale identity:</strong> frontmatter <code>project_name: conference-envocc</code> and title "ENVOCC…" while the host project is <code>conf-rails</code> — reconcile during Correct Course (adversarial M-2).</li>
+        <li><strong>Dangling ID reference:</strong> FR-095 cites "resolves OQ-3" but the PRD contains no OQ-1/OQ-2/OQ-3 and no Open Questions section — the single clearest mechanical defect.</li>
+        <li><strong>FR numbering gaps are intentional:</strong> per-feature spacing (FR-001–004, FR-010–016, …); interpolated IDs FR-034b and FR-041a are unique and correctly placed; no duplicates observed.</li>
+        <li><strong>Assumptions Index:</strong> none present — no inline <code>[ASSUMPTION]</code> tags and no index (see Scope honesty).</li>
+        <li><strong>Glossary:</strong> none present; domain nouns are nonetheless used consistently (no drift on "registered attendee", "owning organizer", "external registrant", "internal user").</li>
+        <li><strong>Required sections:</strong> Problem Statement, Goals &amp; Metrics, Users &amp; Roles, FRs, NFRs, Constraints, Out-of-Scope all present. Missing relative to rubric scaffolding: Open Questions, Assumptions Index, <code>[NOTE FOR PM]</code> callouts, explicit Glossary.</li>
+      </ul>
+    </div>
+
+    <footer class="report-footer">
+      <div class="meta">
+        <span>Rubric: .claude/skills/bmad-prd/assets/prd-validation-checklist.md</span>
+        <span>Generated: 2026-06-18T21:25:55+0700</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

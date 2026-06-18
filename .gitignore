@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+
+# Secrets — NEVER commit any credential (real or test). See architecture.md "Security & Secrets".
+*.key
+config/master.key
+config/credentials/*.key
+.env
+.env.*
+*.pem
+*.p12
+
+# BAD / local tooling (personal, machine-specific)
+.claude/settings.local.json
+.claude/bad-statusline.sh
+.claude/bad-session-state.json
+.worktrees/
+
+# Editor / misc
+*.swp
+*~
