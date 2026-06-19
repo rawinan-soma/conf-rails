@@ -1,19 +1,12 @@
 # frozen_string_literal: true
 
-# ATDD Red-Phase Tests — Story 1.4: Capacities, Admin Role & Pundit Authorization Baseline
+# Tests — Story 1.4: Capacities, Admin Role & Pundit Authorization Baseline
 # Test Level: Unit (Policy)
-#
-# All tests are SKIPPED (TDD red phase).
-# Remove the `skip` line for each test as its corresponding task is implemented,
-# confirm the test FAILS first, then passes after implementation.
 #
 # Acceptance Criteria Covered:
 #   AC-1: Every authenticated user has organizer + attendee capacities by default
 #   AC-2: Every controller action authorized through a Pundit policy; 403 on denial
 #   AC-3: Admin user gets system-wide read access; no create/approve/edit of others' bookings
-#
-# Activation Map:
-#   Task 2 (ApplicationPolicy): activate all tests in this file
 
 require "test_helper"
 
@@ -27,8 +20,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] ApplicationPolicy#index? returns false for a plain user on a generic record" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user   = users(:regular_user)
     policy = ApplicationPolicy.new(user, Object.new)
 
@@ -37,8 +28,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   end
 
   test "[P0] ApplicationPolicy#show? returns false for a plain user on a generic record" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user   = users(:regular_user)
     policy = ApplicationPolicy.new(user, Object.new)
 
@@ -47,8 +36,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   end
 
   test "[P0] ApplicationPolicy#create? returns false for a plain user on a generic record" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user   = users(:regular_user)
     policy = ApplicationPolicy.new(user, Object.new)
 
@@ -57,8 +44,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   end
 
   test "[P0] ApplicationPolicy#new? returns false for a plain user on a generic record" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user   = users(:regular_user)
     policy = ApplicationPolicy.new(user, Object.new)
 
@@ -67,8 +52,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   end
 
   test "[P0] ApplicationPolicy#update? returns false for a plain user on a generic record" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user   = users(:regular_user)
     policy = ApplicationPolicy.new(user, Object.new)
 
@@ -77,8 +60,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   end
 
   test "[P0] ApplicationPolicy#edit? returns false for a plain user on a generic record" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user   = users(:regular_user)
     policy = ApplicationPolicy.new(user, Object.new)
 
@@ -87,8 +68,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   end
 
   test "[P0] ApplicationPolicy#destroy? returns false for a plain user on a generic record" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user   = users(:regular_user)
     policy = ApplicationPolicy.new(user, Object.new)
 
@@ -101,8 +80,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] ApplicationPolicy::Scope#resolve raises NotImplementedError for base class" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user  = users(:regular_user)
     scope = ApplicationPolicy::Scope.new(user, Object.new)
 
@@ -119,8 +96,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] admin? returns false for a regular user (organizer+attendee only)" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user = users(:regular_user)
 
     # Every user has organizer+attendee capacities — expressed as user.present? in policies.
@@ -130,8 +105,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   end
 
   test "[P1] admin? returns true for an admin user" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user = users(:admin_user)
 
     assert user.admin?,
@@ -143,8 +116,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] ApplicationPolicy exposes user and record via attr_reader" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     user   = users(:regular_user)
     record = Object.new
     policy = ApplicationPolicy.new(user, record)
@@ -159,8 +130,6 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] admin user has admin? true — structural prerequisite for AC-3 BookingPolicy and RegistrationPolicy" do
-    skip "ATDD RED PHASE — activate when Task 2 (ApplicationPolicy) is implemented"
-
     # AC-3: 'Given an admin user, when they read bookings/registrant data, then policy grants
     # system-wide read access, but no create/approve/edit of others' bookings.'
     #

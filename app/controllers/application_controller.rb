@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
+
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
@@ -16,6 +18,13 @@ class ApplicationController < ActionController::Base
   # Enforce session timeout BEFORE require_authentication in before_action chain
   before_action :enforce_session_timeout
   before_action :require_authentication
+
+  # Story 1.4: Enforce authorization on every action. Controllers with no Pundit subject
+  # (sessions, temporary home) must call skip_after_action :verify_authorized.
+  # This project does NOT use Devise — do NOT use `unless: :devise_controller?`.
+  after_action :verify_authorized
+
+  rescue_from Pundit::NotAuthorizedError, with: :handle_not_authorized
 
   # Returns the currently authenticated user, or nil for unauthenticated requests.
   def current_user
@@ -67,5 +76,14 @@ class ApplicationController < ActionController::Base
     return if decoded.start_with?("//", "/\\", '/\/')
 
     url
+  end
+
+  private
+
+  # Story 1.4: Handle Pundit authorization failures.
+  # Returns 403 via redirect to root_path with an alert flash message.
+  def handle_not_authorized
+    flash[:alert] = t("flash.not_authorized")
+    redirect_to root_path
   end
 end

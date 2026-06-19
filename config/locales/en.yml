@@ -27,6 +27,7 @@ en:
       success_prefix: Success
   flash:
     authentication_failed: Sign-in failed. Please try again.
+    not_authorized: You are not authorized to perform that action.
     session_timeout: Your session has expired. Please sign in again.
     signed_out: You have been signed out.
   home:

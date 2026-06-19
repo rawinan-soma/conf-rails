@@ -1,25 +1,13 @@
 # frozen_string_literal: true
 
-# ATDD Red-Phase Tests — Story 1.4: Capacities, Admin Role & Pundit Authorization Baseline
+# Tests — Story 1.4: Capacities, Admin Role & Pundit Authorization Baseline
 # Test Level: Integration
-#
-# All tests are SKIPPED (TDD red phase).
-# Remove the `skip` line for each test as its corresponding task is implemented,
-# confirm the test FAILS first, then passes after implementation.
 #
 # Acceptance Criteria Covered:
 #   AC-1: Every authenticated user has organizer + attendee capacities by default
 #   AC-2: Every controller action authorized through a Pundit policy; 403 on denial
 #   AC-3: Admin user gets system-wide read access (structural prerequisite asserted here;
 #         full enforcement in Stories 2.1 and 3.1)
-#
-# Activation Map:
-#   Task 1 (include Pundit::Authorization + after_action :verify_authorized + rescue_from):
-#     activate AC-2 enforcement tests and SessionsController/HomeController skip tests
-#   Task 3 (HomeController skip_after_action):
-#     activate "GET / returns 200" test
-#   Task 5 (I18n key):
-#     activate flash message content test
 
 require "test_helper"
 
@@ -29,8 +17,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] authenticated user hits GET / and gets 200 — HomeController skips verify_authorized" do
-    skip "ATDD RED PHASE — activate when Task 1 + Task 3 are implemented (verify_authorized + HomeController skip)"
-
     sign_in
 
     get root_path
@@ -45,8 +31,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] unauthenticated user hitting GET / is redirected to sign-in — verify_authorized does not interfere" do
-    skip "ATDD RED PHASE — activate when Task 1 is implemented (Pundit wired in ApplicationController)"
-
     get root_path
 
     assert_redirected_to new_session_path,
@@ -58,8 +42,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] GET /sign_in does NOT raise Pundit::NotAuthorizedError — SessionsController skips verify_authorized" do
-    skip "ATDD RED PHASE — activate when Task 1 is implemented (skip_after_action in SessionsController)"
-
     get new_session_path
 
     assert_response :success,
@@ -67,8 +49,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] DELETE /sign_out does NOT raise Pundit::NotAuthorizedError — SessionsController skips verify_authorized" do
-    skip "ATDD RED PHASE — activate when Task 1 is implemented (skip_after_action in SessionsController)"
-
     sign_in
     delete sign_out_path
 
@@ -85,8 +65,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] Pundit::NotAuthorizedError is rescued with 403 redirect and flash alert" do
-    skip "ATDD RED PHASE — activate when Task 1 is implemented (rescue_from Pundit::NotAuthorizedError)"
-
     # This test verifies the rescue_from handler behavior by directly testing
     # ApplicationPolicy deny behavior + flash/redirect contract.
     #
@@ -115,8 +93,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] flash.not_authorized I18n key returns a non-empty string in English" do
-    skip "ATDD RED PHASE — activate when Task 5 (I18n key) is implemented"
-
     # AC-2: unauthorized attempt returns 403 with a flash message
     # This test validates the I18n key is present and translates to a human-readable string.
     I18n.with_locale(:en) do
@@ -131,8 +107,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] flash.not_authorized I18n key is mirrored in Thai locale" do
-    skip "ATDD RED PHASE — activate when Task 5 (I18n key) is implemented"
-
     # i18n-tasks health will also catch this, but an explicit test is the ATDD contract.
     I18n.with_locale(:th) do
       message = I18n.t("flash.not_authorized")
@@ -149,8 +123,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P1] any authenticated user reaches GET / — organizer+attendee capacities are default, no assignment required" do
-    skip "ATDD RED PHASE — activate when Task 1 + Task 3 are implemented"
-
     # FR-091: Organizer + attendee are default capacities; no role assignment needed.
     # This test expresses that constraint at the HTTP layer: any user who is authenticated
     # can reach the root path (home controller skips verify_authorized, but no 403 fires).
@@ -165,8 +137,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   end
 
   test "[P1] admin user also reaches GET / — admin is the only elevated role, not a restriction" do
-    skip "ATDD RED PHASE — activate when Task 1 + Task 3 are implemented"
-
     # Admin capacity is additive — admin users still have organizer+attendee capacities too.
     sign_in(uid: "test-uid-admin-001", email: "admin@example.test")
 
@@ -181,15 +151,11 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P1] ApplicationController includes Pundit::Authorization" do
-    skip "ATDD RED PHASE — activate when Task 1 is implemented"
-
     assert ApplicationController.ancestors.include?(Pundit::Authorization),
            "ApplicationController must include Pundit::Authorization (Task 1)"
   end
 
   test "[P1] ApplicationController has after_action :verify_authorized registered" do
-    skip "ATDD RED PHASE — activate when Task 1 is implemented"
-
     # Verify the after_action callback is registered (not just included).
     # Rails stores after_actions as an array on __callbacks[:verify_authorized].
     verify_authorized_callbacks = ApplicationController._process_action_callbacks.select do |cb|
@@ -201,8 +167,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   end
 
   test "[P1] SessionsController has skip_after_action :verify_authorized registered" do
-    skip "ATDD RED PHASE — activate when Task 1 is implemented (SessionsController skip)"
-
     # Ensure SessionsController does NOT have verify_authorized in its effective callback chain.
     # The skip_after_action :verify_authorized must suppress the parent's after_action.
     effective_callbacks = SessionsController._process_action_callbacks.select do |cb|
