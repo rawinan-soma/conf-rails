@@ -1,5 +1,7 @@
 version: 2
 
+# GitGuardian app removed — gitleaks CI job handles secret scanning
+
 # GitGuardian ignore configuration for conf-rails
 # All detections below are confirmed false positives:
 #
