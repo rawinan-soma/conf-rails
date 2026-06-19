@@ -4,7 +4,7 @@ baseline_commit: 00046d63ec6b2a8495d752a32970dffca045ae73
 
 # Story 1.6: Email & Background-Job Infrastructure
 
-Status: review
+Status: done
 
 ## Story
 
@@ -355,6 +355,17 @@ test/
 - Mailer unit tests: `test/mailers/application_mailer_test.rb`
 - Job unit tests: `test/jobs/application_job_test.rb`
 - Integration tests: `test/integration/email_infrastructure_test.rb`
+
+### Review Findings
+
+Code review (Step 5) — 2026-06-19. Layers: Blind Hunter, Edge Case Hunter, Acceptance Auditor.
+
+- [x] [Review][Patch] recurring.yml referenced non-existent `SendEventRemindersJob`; actual class is `SendEventReminderJob` [config/recurring.yml:25] — FIXED. Solid Queue's `RecurringSchedule` uses `safe_constantize` + `.select(&:valid?)`, so the mismatch silently dropped the `send_event_reminders` 01:00 UTC schedule (it would never enqueue) rather than crashing at boot. Renamed the class reference to the singular `SendEventReminderJob` (the form used by the job file, class definition, and all 3 tests). Verified: both recurring entries now constantize cleanly. (Critical — AC #1)
+- [x] [Review][Patch] `config.action_mailer.delivery_method = :async` was invalid in development [config/environments/development.rb:41] — FIXED. `:async` is not a registered ActionMailer delivery method (valid: `:smtp`, `:sendmail`, `:file`, `:test` — confirmed via `ActionMailer::Base.delivery_methods.keys`). Any mailer invoked in dev would raise "Invalid delivery method :async." Changed to `:test`, which satisfies the spec intent ("dev never attempts real SMTP") and stores deliveries in `ActionMailer::Base.deliveries`. (Medium)
+- [x] [Review][Defer] `SendEventReminderJob#perform(booking_id)` requires an arg, but the recurring entry passes none — would raise ArgumentError when the schedule fires [app/jobs/send_event_reminder_job.rb:9] — deferred to Story 3.8 (owns this job's real signature; daily recurring reminder almost certainly fans out with no args).
+- [x] [Review][Defer] Production SMTP/host settings resolve to nil if `smtp:`/`app:` keys are absent from `config/credentials.yml.enc`; with `raise_delivery_errors = true` the first production send would raise [config/environments/production.rb:64-75] — deferred. Credential population is Rawinan's deployment responsibility per spec Dev Notes (Story 4.5 admin UI is separate scope). Not a code defect.
+
+Dismissed as noise (4): (1) Blind/Edge claim that `retry_on StandardError` would retry the stub jobs — false: `NotImplementedError` descends from `ScriptError`, not `StandardError`, so stubs fail-fast (verified). (2) Claim that `retry_on ActiveRecord::Deadlocked` is dead code shadowed by `retry_on StandardError` — false: ActiveSupport's `rescue_with_handler` resolves handlers in reverse registration order, so the later-declared specific handlers win; verified a `Deadlocked` error resolves to `ActiveRecord::Deadlocked` and a `DeserializationError` resolves to its discard handler. Current ordering is correct. (3) `.kamal/secrets SMTP_PASSWORD=$SMTP_PASSWORD` "not consumed by app" — intentional per spec (resolves deferred-work item; app reads password from encrypted credentials, the Kamal secret is for deploy-time env injection). (4) `filter_parameter_logging.rb` lacks an explicit `smtp_password` key — the existing `:passw` partial-match filter already masks it; no leak.
 
 ## Dev Agent Record
 

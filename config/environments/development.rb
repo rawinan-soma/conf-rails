@@ -37,8 +37,10 @@ Rails.application.configure do
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
 
-  # Explicitly set :async so dev never attempts real SMTP (Rails default without this is :smtp).
-  config.action_mailer.delivery_method = :async
+  # Explicitly set :test so dev never attempts real SMTP (Rails default without this is :smtp).
+  # :async is NOT a valid ActionMailer delivery_method (valid: :smtp, :sendmail, :file, :test);
+  # async delivery is controlled by deliver_later + the ActiveJob queue adapter, not delivery_method.
+  config.action_mailer.delivery_method = :test
 
   # Set localhost to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
