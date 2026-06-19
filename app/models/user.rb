@@ -25,9 +25,27 @@ class User < ApplicationRecord
 
   # Finds an existing user by (provider, uid) or creates a new one.
   # Email is set on creation only — NOT updated on subsequent logins (FR-095 design).
+  #
+  # Returns nil if the auth hash is missing required identity claims (provider/uid).
+  # Returns an unpersisted (invalid) User when the IdP omits a required attribute
+  # such as email — callers MUST check `persisted?` before starting a session.
+  #
+  # Uses create_or_find_by for race safety: the DB unique index on (provider, uid)
+  # is the source of truth, so concurrent first-logins resolve to the same row
+  # instead of raising ActiveRecord::RecordNotUnique.
   def self.find_or_create_by_omniauth(auth)
-    find_or_create_by(provider: auth.provider, uid: auth.uid) do |u|
-      u.email = auth.info.email
+    return nil if auth.nil?
+
+    provider = auth.provider
+    uid = auth.uid
+    return nil if provider.blank? || uid.blank?
+
+    create_or_find_by(provider: provider, uid: uid) do |u|
+      u.email = auth.info&.email
     end
+  rescue ActiveRecord::RecordNotUnique
+    # A non-(provider,uid) unique constraint (e.g. the email index) was violated.
+    # Treat as an authentication failure rather than crashing the callback.
+    find_by(provider: provider, uid: uid)
   end
 end

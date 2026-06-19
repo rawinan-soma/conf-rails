@@ -10,8 +10,11 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Story 1.3: Authentication routes
-  # OmniAuth callback is GET because IdP redirects back with GET after auth
-  get  "/auth/:provider/callback", to: "sessions#create", as: :auth_callback
+  # OmniAuth callback is GET because IdP redirects back with GET after auth.
+  # Constrain :provider to the single configured provider so arbitrary
+  # /auth/<x>/callback requests don't reach sessions#create with no omniauth.auth.
+  get  "/auth/:provider/callback", to: "sessions#create", as: :auth_callback,
+       constraints: { provider: /openid_connect/ }
   get  "/auth/failure",            to: "sessions#failure", as: :auth_failure
   get  "/sign_in",                 to: "sessions#new",    as: :new_session
   delete "/sign_out",              to: "sessions#destroy", as: :sign_out

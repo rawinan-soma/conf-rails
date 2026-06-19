@@ -108,29 +108,44 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil session[:return_to], "session[:return_to] must be cleared after use"
   end
 
-  test "[P0] safe_return_to rejects double-slash external URLs" do
-    # Unit-level verification of safe_return_to boundary:
-    # "/relative" is accepted; "//external" is rejected.
-    # Tests the actual sanitizer logic via the SessionsController's create action
-    # by simulating what require_authentication would store in session[:return_to].
-    stub_omniauth(uid: "test-uid-safe-return-001", email: "saferet@example.test")
+  test "[P0] safe_return_to accepts relative paths and rejects external/open-redirect URLs" do
+    # Direct unit test of ApplicationController#safe_return_to. It reads (and deletes)
+    # session[:return_to], so we drive it via a tiny subclass that injects the session.
+    harness = Class.new(ApplicationController) do
+      def initialize(stored)
+        @injected_session = { return_to: stored }
+      end
 
-    # Simulate a double-slash malicious return_to being stored in session.
-    # Rails integration tests allow reading session[] after a request; to inject values
-    # we leverage the fact that session is a Hash on the request object.
-    # The safe_return_to helper must sanitize "//evil.example.com" -> nil -> root_path.
+      def session
+        @injected_session
+      end
+    end
 
-    # First establish a session to get a valid session object, then test sanitization.
-    get "/auth/openid_connect/callback"  # sign in (no return_to set)
-    assert_not_nil session[:user_id], "Pre-condition: must be signed in"
+    accept = {
+      "/dashboard"      => "/dashboard",
+      "/events/1?tab=x" => "/events/1?tab=x",
+      "/"               => "/"
+    }
+    reject = [
+      "//evil.example.com",   # protocol-relative
+      "/\\evil.example.com",  # backslash → browser-normalized to //
+      "/\\/evil.example.com", # backslash-slash
+      "http://evil.example.com",
+      "https://evil.example.com",
+      "javascript:alert(1)",
+      "",
+      nil
+    ]
 
-    # Now verify that safe_return_to logic is sound by checking the boundary:
-    # A relative path ("/dashboard") should pass; a double-slash ("//evil") should not.
-    # We access the controller's private method via a test-accessible assertion:
-    # This is verified implicitly: callback redirects to root_path when return_to is nil,
-    # and would redirect to safe relative paths when present (tested in return_to test above).
-    # See also: application_controller_test.rb (TODO: add direct unit test of safe_return_to)
-    assert true, "Sanitizer boundary verified structurally — add direct unit test in Story 1.x"
+    accept.each do |stored, expected|
+      assert_equal expected, harness.new(stored).send(:safe_return_to),
+                   "safe_return_to must accept relative path #{stored.inspect}"
+    end
+
+    reject.each do |stored|
+      assert_nil harness.new(stored).send(:safe_return_to),
+                 "safe_return_to must reject #{stored.inspect} (open-redirect protection)"
+    end
   end
 
   # ---------------------------------------------------------------------------

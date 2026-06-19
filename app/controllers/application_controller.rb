@@ -37,7 +37,9 @@ class ApplicationController < ActionController::Base
     return unless session[:user_id]
 
     last_active = session[:last_active_at].to_i
-    if last_active > 0 && Time.current.to_i - last_active > INACTIVITY_TIMEOUT
+    # Fail closed: an authenticated session with a missing/zero last_active_at
+    # (legacy or tampered cookie) is treated as expired rather than never-expiring.
+    if last_active <= 0 || Time.current.to_i - last_active > INACTIVITY_TIMEOUT
       reset_session
       flash[:alert] = t("flash.session_timeout")
       redirect_to new_session_path and return
@@ -50,6 +52,14 @@ class ApplicationController < ActionController::Base
   # Validates it is a relative path to prevent open redirect attacks.
   def safe_return_to
     url = session.delete(:return_to)
-    url if url&.start_with?("/") && !url.start_with?("//")
+    return unless url
+
+    # Only allow a single-leading-slash relative path. Reject protocol-relative
+    # ("//host") and backslash-normalized ("/\host", "/\\host") forms, which
+    # browsers treat as "//host" → external redirect (open redirect).
+    return unless url.start_with?("/")
+    return if url.start_with?("//", "/\\", "/\/")
+
+    url
   end
 end

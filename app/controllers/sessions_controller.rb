@@ -16,19 +16,28 @@ class SessionsController < ApplicationController
     auth = request.env["omniauth.auth"]
     user = User.find_or_create_by_omniauth(auth)
 
+    # auth hash missing/invalid, or the user could not be persisted (e.g. the IdP
+    # omitted a required claim like email, or a unique constraint was violated).
+    # Do NOT start a session — route to the failure flow with a clear message.
+    return redirect_to auth_failure_path unless user&.persisted?
+
+    # Capture the post-login destination before reset_session clears it.
+    destination = safe_return_to || root_path
+
+    reset_session # rotate session id on login to prevent session fixation
     session[:user_id] = user.id
     session[:last_active_at] = Time.current.to_i
 
-    redirect_to safe_return_to || root_path
+    redirect_to destination
   end
 
   # GET /auth/failure
   # OmniAuth calls this when authentication fails
   def failure
-    # Clear any partial session state
-    session.delete(:user_id)
-    session.delete(:last_active_at)
-    session.delete(:return_to)
+    # Rotate the session id and clear ALL partial state to prevent session
+    # fixation (consistent with destroy and the timeout path). Set the flash
+    # AFTER reset_session, which clears the flash store.
+    reset_session
 
     flash[:alert] = t("flash.authentication_failed")
     redirect_to new_session_path

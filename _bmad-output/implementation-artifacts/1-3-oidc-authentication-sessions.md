@@ -4,7 +4,7 @@ baseline_commit: 150f4e07aeb9318082f7392f82a79b24433c265f
 
 # Story 1.3: OIDC Authentication & Sessions
 
-Status: review
+Status: done
 
 ## Story
 
@@ -271,6 +271,21 @@ root to: 'sessions#new'
 - **Integration tests:** `test/integration/authentication_flow_test.rb`
 - **Fixtures:** `test/fixtures/users.yml`
 - **test_helper.rb:** Updated with OmniAuth test mode stubs (commented — activate with Task 2/3)
+
+### Review Findings
+
+Code review (2026-06-19): 9 patch, 1 defer, 3 dismissed (no decision-needed).
+
+- [x] [Review][Patch] Nil `omniauth.auth` crashes `create` (NoMethodError 500) [app/controllers/sessions_controller.rb:16]
+- [x] [Review][Patch] Missing IdP email → unpersisted user, `session[:user_id]=nil`, infinite sign-in loop [app/controllers/sessions_controller.rb:17]
+- [x] [Review][Patch] find-or-create race → `RecordNotUnique` on concurrent first login [app/models/user.rb:28]
+- [x] [Review][Patch] `safe_return_to` backslash/protocol-relative open-redirect bypass (`/\evil.com`) [app/controllers/application_controller.rb:53]
+- [x] [Review][Patch] Session timeout fails open when `last_active_at` absent/zero (`> 0` guard) [app/controllers/application_controller.rb:40]
+- [x] [Review][Patch] `failure` uses `session.delete` not `reset_session` (weaker fixation handling) [app/controllers/sessions_controller.rb:27]
+- [x] [Review][Patch] Unconstrained `:provider` route funnels arbitrary providers into nil-auth crash [config/routes.rb]
+- [x] [Review][Patch] `home/index` dereferences `current_user.email` without nil guard [app/views/home/index.html.erb]
+- [x] [Review][Patch] Open-redirect `//` rejection branch asserted with `assert true` — add real `safe_return_to` test [test/controllers/sessions_controller_test.rb]
+- [x] [Review][Defer] Globally-unique `email` index can block legitimate logins for duplicate IdP emails — spec-mandated (Task 1), tracked in deferred-work [db/migrate/20260619000001_create_users.rb]
 
 ## Dev Agent Record
 
