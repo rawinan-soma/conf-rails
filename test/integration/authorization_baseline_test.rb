@@ -72,9 +72,9 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
     # (the first story that introduces a real resource policy + controller action).
     # Here we validate the rescue_from wiring via the ApplicationPolicy unit + controller contract.
     #
-    # Implementation note: The simplest correct approach is to test that
-    # ApplicationPolicy.new(user, record).show? returns false, AND that
-    # the rescue_from handler sets flash[:alert] with the I18n key value.
+    # Implementation note: Validates ApplicationPolicy.new(user, record).show? returns false,
+    # confirming deny-by-default triggers NotAuthorizedError when authorize is called.
+    # I18n key presence is verified separately in the dedicated locale tests below.
     sign_in
 
     # Directly verify the policy returns false (deny-by-default baseline)
@@ -83,13 +83,6 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
 
     assert_equal false, policy.show?,
                  "ApplicationPolicy#show? must deny — triggering NotAuthorizedError when authorize is called"
-
-    # Verify the I18n key exists and has a value (so rescue_from flash is populated)
-    expected_flash = I18n.t("flash.not_authorized")
-    assert_not_nil expected_flash,
-                   "flash.not_authorized I18n key must be set (Task 5)"
-    assert_not_empty expected_flash,
-                     "flash.not_authorized must have a non-empty value"
   end
 
   test "[P0] flash.not_authorized I18n key returns a non-empty string in English" do

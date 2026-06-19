@@ -16,63 +16,20 @@ class ApplicationPolicyTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   # ---------------------------------------------------------------------------
-  # AC-2: ApplicationPolicy deny-by-default for non-admin user (P0, FR-094)
+  # AC-2: ApplicationPolicy deny-by-default for all CRUD actions (P0, FR-094)
+  # Each policy action must return false for a plain user — safe baseline.
   # ---------------------------------------------------------------------------
 
-  test "[P0] ApplicationPolicy#index? returns false for a plain user on a generic record" do
-    user   = users(:regular_user)
-    policy = ApplicationPolicy.new(user, Object.new)
+  DENY_BY_DEFAULT_ACTIONS = %w[index? show? create? new? update? edit? destroy?].freeze
 
-    assert_equal false, policy.index?,
-                 "ApplicationPolicy#index? must deny all requests by default (deny-by-default baseline)"
-  end
+  DENY_BY_DEFAULT_ACTIONS.each do |action|
+    test "[P0] ApplicationPolicy##{action} returns false for a plain user on a generic record" do
+      user   = users(:regular_user)
+      policy = ApplicationPolicy.new(user, Object.new)
 
-  test "[P0] ApplicationPolicy#show? returns false for a plain user on a generic record" do
-    user   = users(:regular_user)
-    policy = ApplicationPolicy.new(user, Object.new)
-
-    assert_equal false, policy.show?,
-                 "ApplicationPolicy#show? must deny all requests by default"
-  end
-
-  test "[P0] ApplicationPolicy#create? returns false for a plain user on a generic record" do
-    user   = users(:regular_user)
-    policy = ApplicationPolicy.new(user, Object.new)
-
-    assert_equal false, policy.create?,
-                 "ApplicationPolicy#create? must deny all requests by default"
-  end
-
-  test "[P0] ApplicationPolicy#new? returns false for a plain user on a generic record" do
-    user   = users(:regular_user)
-    policy = ApplicationPolicy.new(user, Object.new)
-
-    assert_equal false, policy.new?,
-                 "ApplicationPolicy#new? must deny all requests by default"
-  end
-
-  test "[P0] ApplicationPolicy#update? returns false for a plain user on a generic record" do
-    user   = users(:regular_user)
-    policy = ApplicationPolicy.new(user, Object.new)
-
-    assert_equal false, policy.update?,
-                 "ApplicationPolicy#update? must deny all requests by default"
-  end
-
-  test "[P0] ApplicationPolicy#edit? returns false for a plain user on a generic record" do
-    user   = users(:regular_user)
-    policy = ApplicationPolicy.new(user, Object.new)
-
-    assert_equal false, policy.edit?,
-                 "ApplicationPolicy#edit? must deny all requests by default"
-  end
-
-  test "[P0] ApplicationPolicy#destroy? returns false for a plain user on a generic record" do
-    user   = users(:regular_user)
-    policy = ApplicationPolicy.new(user, Object.new)
-
-    assert_equal false, policy.destroy?,
-                 "ApplicationPolicy#destroy? must deny all requests by default"
+      assert_equal false, policy.public_send(action),
+                   "ApplicationPolicy##{action} must deny all requests by default (deny-by-default baseline)"
+    end
   end
 
   # ---------------------------------------------------------------------------
