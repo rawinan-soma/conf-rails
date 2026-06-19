@@ -16,6 +16,7 @@ en:
     empty_state:
       default_message: Nothing here yet
     modal:
+      close_icon: "✕"
       close_label: Close dialog
     status_badge:
       cancelled: Cancelled

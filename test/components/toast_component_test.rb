@@ -57,12 +57,15 @@ class ToastComponentTest < ViewComponent::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # P1 — Positioned top-right (structural: class or data attribute)
+  # P1 — Alert class present (positioning is handled by #flash-container in the layout)
   # ---------------------------------------------------------------------------
 
-  test "[P1] toast has toast positioning class" do
+  test "[P1] toast renders as an alert element" do
     render_inline(ToastComponent.new(message: "Saved.", type: :success))
-    assert_selector ".toast, [data-toast]"
+    # The .toast daisyUI class is NOT applied to the component itself — it would force
+    # position:fixed on each toast, breaking stacking inside the layout's #flash-container.
+    # Positioning is handled by the fixed #flash-container wrapper in the layout.
+    assert_selector ".alert, [data-controller='toast']"
   end
 
   # ---------------------------------------------------------------------------

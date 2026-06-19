@@ -4,9 +4,12 @@ import { Controller } from "@hotwired/stimulus"
 // open()  -> dialog.showModal() (native focus trap + Escape handling)
 // close() -> dialog.close() and restores focus to the trigger.
 //
-// Trigger a modal from anywhere with:
-//   <button data-action="click->modal#open" data-modal-id-param="my-modal">
-// or call open()/close() on the controller scoped to the dialog.
+// To open the modal, call open() on the controller scoped to the dialog element:
+//   this.application.getControllerForElementAndIdentifier(dialogEl, "modal").open()
+// Or dispatch a custom event from inside the dialog's subtree:
+//   <button data-action="click->modal#open"> (must be inside the <dialog> element)
+// Note: data-controller="modal" is on the <dialog> itself, so Stimulus only routes
+// actions from elements within that dialog's subtree.
 export default class extends Controller {
   connect() {
     this.dialog = this.element.tagName === "DIALOG" ? this.element : this.element.querySelector("dialog")
@@ -20,6 +23,8 @@ export default class extends Controller {
 
   open() {
     if (!this.dialog) return
+    // Guard against double-open: showModal() throws InvalidStateError if already open.
+    if (this.dialog.open) return
     this.previouslyFocused = document.activeElement
     if (typeof this.dialog.showModal === "function") {
       this.dialog.showModal()

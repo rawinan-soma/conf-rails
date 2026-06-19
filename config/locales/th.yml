@@ -16,6 +16,7 @@ th:
     empty_state:
       default_message: ยังไม่มีข้อมูล
     modal:
+      close_icon: "✕"
       close_label: ปิดหน้าต่างโต้ตอบ
     status_badge:
       cancelled: ยกเลิกแล้ว

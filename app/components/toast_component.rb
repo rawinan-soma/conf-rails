@@ -19,7 +19,7 @@ class ToastComponent < ApplicationComponent
 
   def initialize(message:, type: :info)
     @message = message
-    @type = type.to_sym
+    @type = type&.to_sym || :info
   end
 
   def alert_class
