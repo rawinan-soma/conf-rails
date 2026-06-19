@@ -9,14 +9,18 @@ require "test_helper"
 class EmailInfrastructureTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
-  # Disable parallel workers for this test class.
-  # ActionMailer::Base.deliveries is a shared mutable array — parallel workers would cause
-  # race conditions across delivery-count assertions (assert_emails, deliveries.size).
-  parallelize(workers: 1)
-
-  # Clear the deliveries array before each test so delivery counts are isolated.
+  # Clear the deliveries array before and after each test so delivery counts are isolated.
   # ActiveJob::TestHelper auto-clears the job queue but NOT ActionMailer::Base.deliveries.
+  # NOTE: parallelize(workers: 1) was intentionally removed — it sets a process-wide global
+  # (Minitest.parallel_executor) that degrades the entire test suite to 1 worker, not just
+  # this class. Instead we rely on setup/teardown to keep deliveries isolated per test.
+  # ActionMailer::Base.deliveries uses a mutex-protected array in :test delivery mode, so
+  # concurrent reads within a single test are safe as long as we clear between tests.
   setup do
+    ActionMailer::Base.deliveries.clear
+  end
+
+  teardown do
     ActionMailer::Base.deliveries.clear
   end
 

@@ -23,5 +23,5 @@ production:
     # Stub entry — job implemented in Story 3.8. Schedule added now so Solid Queue loads it.
     # 8:00am Asia/Bangkok (UTC+7 → 01:00 UTC)
     class: SendEventReminderJob
-    queue: default
+    queue: mailers
     schedule: every day at 01:00
