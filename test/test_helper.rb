@@ -19,6 +19,10 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
+    # Include ActiveJob::TestHelper globally so all test cases can use assert_enqueued_with,
+    # perform_enqueued_jobs, assert_enqueued_emails, etc. (Story 1.6 / Task 8).
+    include ActiveJob::TestHelper
+
     # Add more helper methods to be used by all tests here...
   end
 end

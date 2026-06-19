@@ -39,7 +39,7 @@ th:
       sign_in: Sign In
       sign_out: Sign Out
   mailers:
-    sender_display: Conf Rails
+    sender_display: ENVOCC Conference <noreply@conf.envocc.org>
   sessions:
     failure:
       authentication_failed: Sign-in failed. Please try again.
