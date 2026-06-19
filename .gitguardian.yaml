@@ -1,0 +1,29 @@
+version: 2
+
+# GitGuardian ignore configuration for conf-rails
+# All detections below are confirmed false positives:
+#
+# 1. JWT header placeholder "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." in skill
+#    documentation files — not a real token, used only as test fixture example.
+#
+# 2. POSTGRES_PASSWORD: postgres in CI workflow (commits 73a1cb3, 3178036) —
+#    ephemeral Docker service container used only in GitHub Actions CI sandbox.
+#    Replaced with secrets reference in commit 5d230cc.
+#
+# 3. The same patterns appearing in .gitleaks.toml regex allowlists (ccce3f3,
+#    b280194) — these are regex strings written to *match* the false positives,
+#    not live credentials.
+
+ignore-paths:
+  - .claude/
+  - _bmad/
+
+# Specific commits where all findings are confirmed false positives
+ignore-commits:
+  - a42036f294301abed02b7e2c56b5c288d80015c6
+  - ccce3f38d13d8efa4bec4d0677040adaf6e36631
+  - b280194d2b59ef33ec761fec72d739865b98dc96
+  - 1048fbe5369d35efe8a2e0a76c52292fa823c8c6
+  - 73a1cb3c81b043e40e23bbba5566b2a63ad8bcc8
+  - 3178036b34caa8a62c28e48bd8e0e9f1dc86d2d9
+  - 5d230cc8828612fa189e6335f321037def9f08dc
