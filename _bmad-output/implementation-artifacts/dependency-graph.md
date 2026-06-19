@@ -1,16 +1,16 @@
 # Story Dependency Graph
-_Last updated: 2026-06-19T02:46:44+07:00_
+_Last updated: 2026-06-19T09:45:00+07:00_
 
 ## Stories
 
 | Story | Epic | Title | Sprint Status | Issue | PR | PR Status | Dependencies | Ready to Work |
 |-------|------|-------|--------------|-------|----|-----------|--------------|---------------|
-| 1.1   | 1    | Project initialization & platform scaffold | done | #1 | #28 | open | none | ✅ Yes (done) |
-| 1.2   | 1    | Core design system & ViewComponent UI library | backlog | #2 | — | — | 1.1 | ❌ No (1.1 not merged) |
-| 1.3   | 1    | OIDC authentication & sessions | backlog | #3 | — | — | 1.1 | ❌ No (1.1 not merged) |
+| 1.1   | 1    | Project initialization & platform scaffold | done | #1 | #28 | merged | none | ✅ Yes (done) |
+| 1.2   | 1    | Core design system & ViewComponent UI library | backlog | #2 | — | — | 1.1 | ✅ Yes |
+| 1.3   | 1    | OIDC authentication & sessions | backlog | #3 | — | — | 1.1 | ✅ Yes |
 | 1.4   | 1    | Capacities, admin role & Pundit authorization baseline | backlog | #4 | — | — | 1.3 | ❌ No (1.3 not merged) |
 | 1.5   | 1    | First-login profile completion | backlog | #5 | — | — | 1.3, 1.4 | ❌ No (1.3, 1.4 not merged) |
-| 1.6   | 1    | Email & background-job infrastructure | backlog | #6 | — | — | 1.1 | ❌ No (1.1 not merged) |
+| 1.6   | 1    | Email & background-job infrastructure | backlog | #6 | — | — | 1.1 | ✅ Yes |
 | 2.1   | 2    | Room inventory management (admin) | backlog | #7 | — | — | epic 1 complete | ❌ No (epic 1 not complete) |
 | 2.2   | 2    | Room time-slot blocking (admin) | backlog | #8 | — | — | 2.1 | ❌ No (epic 1 not complete) |
 | 2.3   | 2    | Room calendar — week scheduler | backlog | #9 | — | — | 2.1 | ❌ No (epic 1 not complete) |
@@ -73,4 +73,4 @@ _Last updated: 2026-06-19T02:46:44+07:00_
 
 **Bottlenecks:** Story 1.1 is the single serial gate for the entire project. Story 2.1 gates all of Epic 2. Story 3.1 gates all of Epic 3. Epic sequencing is strict: E1 → E2 → E3 → E4.
 
-**Current blocker:** PR #28 (story 1.1) is open but not yet merged. Once merged, stories 1.2, 1.3, and 1.6 become immediately available to work in parallel.
+**Current status:** PR #28 (story 1.1) merged 2026-06-19. Stories 1.2, 1.3, and 1.6 are now immediately available to work in parallel. Story 1.4 unblocks once 1.3 merges; story 1.5 unblocks once both 1.3 and 1.4 merge.

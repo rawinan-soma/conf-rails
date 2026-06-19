@@ -36,7 +36,7 @@
 # - BAD pipeline enforces strict lowest-epic-first ordering: E1 → E2 → E3 → E4
 
 generated: 2026-06-18
-last_updated: 2026-06-19T00:00:00+07:00
+last_updated: 2026-06-19T09:45:00+07:00
 project: conf-rails
 
 project_key: NOKEY
