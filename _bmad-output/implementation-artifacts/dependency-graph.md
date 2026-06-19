@@ -1,16 +1,16 @@
 # Story Dependency Graph
-_Last updated: 2026-06-19T19:30:00+07:00_
+_Last updated: 2026-06-19T20:30:00+07:00_
 
 ## Stories
 
 | Story | Epic | Title | Sprint Status | Issue | PR | PR Status | Dependencies | Ready to Work |
 |-------|------|-------|--------------|-------|----|-----------|--------------|---------------|
 | 1.1   | 1    | Project initialization & platform scaffold | done | #1 | #28 | merged | none | ✅ Yes (done) |
-| 1.2   | 1    | Core design system & ViewComponent UI library | review | #2 | #35 | open | 1.1 | ✅ Yes (in review) |
-| 1.3   | 1    | OIDC authentication & sessions | review | #3 | #36 | open | 1.1 | ✅ Yes (in review) |
-| 1.4   | 1    | Capacities, admin role & Pundit authorization baseline | backlog | #4 | — | — | 1.3 | ❌ No (1.3 not merged) |
-| 1.5   | 1    | First-login profile completion | backlog | #5 | — | — | 1.3, 1.4 | ❌ No (1.3, 1.4 not merged) |
-| 1.6   | 1    | Email & background-job infrastructure | done | #6 | #37 | open | 1.1 | ✅ Yes (done) |
+| 1.2   | 1    | Core design system & ViewComponent UI library | done | #2 | #35 | merged | 1.1 | ✅ Yes (done) |
+| 1.3   | 1    | OIDC authentication & sessions | done | #3 | #36 | merged | 1.1 | ✅ Yes (done) |
+| 1.4   | 1    | Capacities, admin role & Pundit authorization baseline | backlog | #4 | — | — | 1.3 | ✅ Yes |
+| 1.5   | 1    | First-login profile completion | backlog | #5 | — | — | 1.3, 1.4 | ❌ No (1.4 not merged) |
+| 1.6   | 1    | Email & background-job infrastructure | done | #6 | #37 | merged | 1.1 | ✅ Yes (done) |
 | 2.1   | 2    | Room inventory management (admin) | backlog | #7 | — | — | epic 1 complete | ❌ No (epic 1 not complete) |
 | 2.2   | 2    | Room time-slot blocking (admin) | backlog | #8 | — | — | 2.1 | ❌ No (epic 1 not complete) |
 | 2.3   | 2    | Room calendar — week scheduler | backlog | #9 | — | — | 2.1 | ❌ No (epic 1 not complete) |
@@ -73,4 +73,4 @@ _Last updated: 2026-06-19T19:30:00+07:00_
 
 **Bottlenecks:** Story 1.1 is the single serial gate for the entire project. Story 2.1 gates all of Epic 2. Story 3.1 gates all of Epic 3. Epic sequencing is strict: E1 → E2 → E3 → E4.
 
-**Current status (2026-06-19):** PR #28 (1.1) merged. PR #35 (1.2), PR #36 (1.3), PR #37 (1.6) are all open. Stories 1.2 and 1.3 are in review; story 1.6 is marked done. Story 1.4 unblocks once 1.3 merges; story 1.5 unblocks once both 1.3 and 1.4 merge. Epic 1 completes when all of 1.1–1.6 are merged/done.
+**Current status (2026-06-19):** PRs #35 (1.2), #36 (1.3), and #37 (1.6) all merged. Stories 1.1, 1.2, 1.3, and 1.6 are done. Story 1.4 is now unblocked (1.3 merged) — ready to work. Story 1.5 unblocks once 1.4 merges. Epic 1 completes when 1.4 and 1.5 are also merged/done.
