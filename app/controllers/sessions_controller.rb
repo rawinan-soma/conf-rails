@@ -9,6 +9,11 @@ class SessionsController < ApplicationController
   skip_before_action :enforce_session_timeout, only: %i[new create failure destroy]
   skip_before_action :require_authentication, only: %i[new create failure destroy]
 
+  # Story 1.4: No Pundit policy subject for auth flows — skip verify_authorized entirely.
+  # Story 1.5 will add: before_action :require_profile_complete
+  # This skip list may need to be extended for the profile/sessions controllers.
+  skip_after_action :verify_authorized
+
   # GET /sign_in
   def new
     # Renders the sign-in page with the IdP button

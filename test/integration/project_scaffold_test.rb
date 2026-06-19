@@ -269,9 +269,10 @@ class ProjectScaffoldTest < ActiveSupport::TestCase
            "ApplicationController must inherit from ActionController::Base"
   end
 
-  test "[P2] ApplicationController does not include Pundit::Authorization at this stage" do
+  test "[P2] ApplicationController includes Pundit::Authorization (added in Story 1.4)" do
+    # Story 1.1 placeholder test was inverted — Story 1.4 adds Pundit::Authorization.
     ancestors = ApplicationController.ancestors
-    refute_includes ancestors, Pundit::Authorization,
-                    "ApplicationController must NOT include Pundit::Authorization in Story 1.1 (that is Story 1.4)"
+    assert_includes ancestors, Pundit::Authorization,
+                    "ApplicationController must include Pundit::Authorization (Story 1.4)"
   end
 end
