@@ -1,0 +1,15 @@
+title = "conf-rails gitleaks config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Ignore Claude skills and BMAD config — documentation/tooling files with no real secrets"
+paths = [
+  '''.claude/''',
+  '''_bmad/''',
+]
+
+[[allowlists]]
+description = "Ignore specific offending commit (all findings are false positives)"
+commits = ["1048fbe5369d35efe8a2e0a76c52292fa823c8c6"]

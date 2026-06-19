@@ -38,6 +38,7 @@
 generated: 2026-06-18
 last_updated: 2026-06-19T00:00:00+07:00
 project: conf-rails
+
 project_key: NOKEY
 tracking_system: file-system
 story_location: _bmad-output/implementation-artifacts
