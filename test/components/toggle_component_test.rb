@@ -61,12 +61,14 @@ class ToggleComponentTest < ViewComponent::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # P2 — Name/value attributes set from form context
+  # P2 — Extra html_options forwarded to standalone input via tag.attributes
   # ---------------------------------------------------------------------------
 
-  test "[P2] renders toggle with correct name attribute when form kwarg provided" do
-    # Simulate without a real form builder — test standalone attribute rendering
-    render_inline(ToggleComponent.new(attribute: :catering_enabled, label: "Catering"))
-    assert_selector "input[type='checkbox']"
+  test "[P2] html_options are forwarded to standalone toggle input" do
+    # Verify that extra html_options kwargs pass through to the standalone input branch.
+    # (tag.attributes(@html_options) renders them as HTML attribute string in the template)
+    render_inline(ToggleComponent.new(attribute: :catering_enabled, label: "Catering",
+                                       data: { action: "change->catering#toggle" }))
+    assert_selector "input[type='checkbox'][data-action='change->catering#toggle']"
   end
 end
