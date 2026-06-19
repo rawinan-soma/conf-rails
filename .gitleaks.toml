@@ -1,25 +1,15 @@
-# Gitleaks configuration — allowlist for known false positives
-# See: https://github.com/gitleaks/gitleaks#configuration
-
 title = "conf-rails gitleaks config"
 
-[allowlist]
-description = "Ignore documentation examples and known safe CI values"
+[extend]
+useDefault = true
 
-# Entire paths to ignore (skill documentation and example files)
+[[allowlists]]
+description = "Ignore Claude skills and BMAD config — documentation/tooling files with no real secrets"
 paths = [
   '''.claude/''',
+  '''_bmad/''',
 ]
 
-# Specific commit SHAs where only documentation was committed (commit 1048fbe)
-commits = [
-  "1048fbe5369d35efe8a2e0a76c52292fa823c8c6",
-]
-
-# Regex patterns to ignore across the repo
-regexes = [
-  # Example JWT placeholder in documentation — not a real token
-  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.\.\\.''',
-  # Ephemeral CI-only postgres password
-  '''POSTGRES_PASSWORD:\s*postgres''',
-]
+[[allowlists]]
+description = "Ignore specific offending commit (all findings are false positives)"
+commits = ["1048fbe5369d35efe8a2e0a76c52292fa823c8c6"]
