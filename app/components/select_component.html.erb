@@ -1,7 +1,7 @@
 <div class="form-control mb-4">
   <label class="label" for="<%= field_id %>">
     <span class="label-text font-medium">
-      <%= @label %><% if required? %> <span class="text-danger" aria-label="<%= t('common.required_field') %>">*</span><% end %>
+      <%= @label %><% if required? %> <span class="text-danger" style="color: var(--color-danger);" aria-label="<%= t('common.required_field') %>">*</span><% end %>
     </span>
   </label>
   <% if @form && @attribute %>

@@ -1,11 +1,15 @@
-<% @rows.times do %>
-  <% if @variant == :card %>
-    <div class="skeleton h-32 w-full rounded" style="border-radius: var(--radius-md);"></div>
-  <% elsif @variant == :list_row %>
-    <div class="skeleton flex gap-4 items-center h-8 w-full rounded"></div>
-  <% elsif @variant == :table_row %>
-    <div class="skeleton h-4 w-full rounded"></div>
-  <% elsif @variant == :calendar_grid %>
-    <div class="skeleton h-32 w-full rounded" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem;"></div>
+<div role="status" aria-busy="true" aria-label="<%= t('common.loading') %>">
+  <% row_count.times do %>
+    <% if @variant == :card %>
+      <div class="skeleton h-32 w-full rounded" style="border-radius: var(--radius-md);" aria-hidden="true"></div>
+    <% elsif @variant == :list_row %>
+      <div class="skeleton flex gap-4 items-center h-8 w-full rounded" aria-hidden="true"></div>
+    <% elsif @variant == :table_row %>
+      <div class="skeleton h-4 w-full rounded" aria-hidden="true"></div>
+    <% elsif @variant == :calendar_grid %>
+      <div class="skeleton h-32 w-full rounded" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem;" aria-hidden="true"></div>
+    <% else %>
+      <div class="skeleton h-8 w-full rounded" aria-hidden="true"></div>
+    <% end %>
   <% end %>
-<% end %>
+</div>

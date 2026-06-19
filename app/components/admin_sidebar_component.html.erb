@@ -1,10 +1,10 @@
 <aside class="min-h-screen w-64 flex-shrink-0 bg-green-900" style="background-color: var(--color-green-900);">
-  <nav aria-label="<%= t('components.modal.close_label', default: 'Admin navigation') %>">
+  <nav aria-label="<%= t('components.admin_sidebar.nav_label') %>">
     <div class="p-4">
       <% @nav_items.each do |item| %>
         <a href="<%= item[:path] %>"
            class="flex items-center px-4 py-3 rounded-lg mb-1 text-sm font-medium transition-colors <%= item[:active] ? 'bg-green-700 text-white' : 'text-white/70 hover:text-white hover:bg-white/10' %>"
-           aria-current="<%= 'page' if item[:active] %>">
+           aria-current="<%= item[:active] ? 'page' : nil %>">
           <%= item[:label] %>
         </a>
       <% end %>

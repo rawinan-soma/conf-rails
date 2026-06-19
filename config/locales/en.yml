@@ -9,6 +9,8 @@ en:
     loading: Loading...
     required_field: required
   components:
+    admin_sidebar:
+      nav_label: Admin navigation
     button:
       loading_text: Please wait...
     empty_state:
@@ -20,6 +22,7 @@ en:
       registered: Registered
     toast:
       error_prefix: Error
+      info_prefix: Info
       success_prefix: Success
   mailers:
     sender_display: Conf Rails

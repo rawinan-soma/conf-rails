@@ -15,4 +15,9 @@ class SkeletonComponent < ApplicationComponent
   def rows
     @rows
   end
+
+  # Guard against nil/negative/non-integer rows so the template loop is always safe.
+  def row_count
+    [ @rows.to_i, 1 ].max
+  end
 end

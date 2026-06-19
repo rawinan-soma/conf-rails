@@ -12,7 +12,7 @@ class ToastComponent < ApplicationComponent
   TYPE_PREFIXES = {
     success: "components.toast.success_prefix",
     error: "components.toast.error_prefix",
-    info: "components.toast.success_prefix",
+    info: "components.toast.info_prefix",
     notice: "components.toast.success_prefix",
     alert: "components.toast.error_prefix"
   }.freeze
@@ -27,7 +27,7 @@ class ToastComponent < ApplicationComponent
   end
 
   def prefix
-    key = TYPE_PREFIXES.fetch(@type, "components.toast.success_prefix")
+    key = TYPE_PREFIXES.fetch(@type, "components.toast.info_prefix")
     I18n.t(key)
   end
 end

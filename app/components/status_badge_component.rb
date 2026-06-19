@@ -7,7 +7,7 @@ class StatusBadgeComponent < ApplicationComponent
   }.freeze
 
   def initialize(status:)
-    @status = status.to_sym
+    @status = status&.to_sym || :unknown
   end
 
   def badge_class

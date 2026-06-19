@@ -1,9 +1,10 @@
 <% if render_as_link? %>
   <%= tag.a @label,
-        href: @href,
-        class: "btn #{variant_class} #{@html_options[:class]}".strip,
+        href: (disabled? ? nil : @href),
+        class: "btn #{variant_class} #{@loading ? 'loading' : ''} #{disabled? ? 'btn-disabled' : ''} #{@html_options[:class]}".squish,
         "data-turbo-method": @method&.to_s,
-        disabled: disabled? || nil,
+        "aria-disabled": disabled? || nil,
+        role: "button",
         **@html_options.except(:class) %>
 <% else %>
   <%= tag.button @label,

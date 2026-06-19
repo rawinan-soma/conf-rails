@@ -4,7 +4,7 @@ baseline_commit: 4741d56
 
 # Story 1.2: Core design system & ViewComponent UI library
 
-Status: review
+Status: done
 
 ## Story
 
@@ -503,3 +503,25 @@ No blocking issues. PostgreSQL not available in local environment; Rails test ru
 ## Change Log
 
 - 2026-06-19: Implemented Story 1.2 — Core Design System & ViewComponent UI Library. Created 11 ViewComponents (Button, FormField, Select, Toggle, ReadOnlyField, StatusBadge, Modal, Toast, Skeleton, EmptyState, AdminSidebar), Forest & Copper daisyUI v5 theme, Thai typography CSS, admin layout, expanded i18n keys. RuboCop 0 offenses, Brakeman 0 warnings, i18n-tasks health 5/5.
+- 2026-06-19: Step 5 code review (Blind Hunter + Edge Case Hunter + Acceptance Auditor). 13 patches applied, 1 decision auto-resolved (Stimulus controllers), 4 deferred, several dismissed as noise. See Review Findings.
+
+### Review Findings
+
+- [x] [Review][Decision] Missing Stimulus controllers for modal/toast behavior — `data-controller="modal"`/`"toast"` were wired but no JS existed, so focus management and toast auto-dismiss (AC2, Tasks 11/12) were non-functional. RESOLVED: added `toast_controller.js` (auto-dismiss + close) and `modal_controller.js` (open/close/Escape/backdrop + focus return) under `app/javascript/controllers/`.
+- [x] [Review][Patch] Invalid `min-font-size` CSS property removed (no-op dead rule) [app/assets/tailwind/application.css:71-73]
+- [x] [Review][Patch] Added green-500 ≥2px `:focus-visible` ring (AC1/AC2 requirement, was entirely absent) [app/assets/tailwind/application.css]
+- [x] [Review][Patch] Admin sidebar `<nav>` aria-label used the modal close-dialog key — added dedicated `components.admin_sidebar.nav_label` [app/components/admin_sidebar_component.html.erb:2]
+- [x] [Review][Patch] `aria-current=""` emitted for inactive nav items — now emits nil so the attribute is omitted [app/components/admin_sidebar_component.html.erb:7]
+- [x] [Review][Patch] Modal close button used CSP-unsafe inline `onclick` — replaced with native `<form method="dialog">` button [app/components/modal_component.html.erb:10]
+- [x] [Review][Patch] Modal backdrop button leaked visible "Close" text — moved to aria-label only [app/components/modal_component.html.erb:28-29]
+- [x] [Review][Patch] ToastComponent unknown/`info` type rendered "Success" prefix (color-alone a11y regression) — added neutral `info_prefix` [app/components/toast_component.rb:12-18]
+- [x] [Review][Patch] StatusBadge hardcoded `line-height: 1.5` violated Thai ≥1.65 floor — set to 1.65 [app/components/status_badge_component.html.erb:1]
+- [x] [Review][Patch] StatusBadge `status.to_sym` crashed on nil — guarded with `&.to_sym` [app/components/status_badge_component.rb:10]
+- [x] [Review][Patch] SkeletonComponent had no else/default branch and no a11y attrs — added default block + `role="status"`/`aria-busy`/`aria-hidden` [app/components/skeleton_component.html.erb]
+- [x] [Review][Patch] Button link branch used invalid `disabled` on `<a>` and dropped loading class — switched to `aria-disabled` and applied loading class [app/components/button_component.html.erb]
+- [x] [Review][Patch] Required-field asterisk used dead `text-danger` Tailwind class with no fallback — added inline `var(--color-danger)` fallback [app/components/form_field_component.html.erb:4, app/components/select_component.html.erb:4]
+- [x] [Review][Patch] ToggleComponent did not forward `checked:` in the form-builder branch — now passes `checked:` through [app/components/toggle_component.html.erb:4]
+- [x] [Review][Defer] FormFieldComponent hardcoded to `text_field` — acceptable MVP narrowing; generalize when a non-text field is first needed [app/components/form_field_component.html.erb] — deferred
+- [x] [Review][Defer] ModalComponent `variant:`/danger stored but unused — danger styling lands with destructive-confirm use in Story 2.6 [app/components/modal_component.rb] — deferred
+- [x] [Review][Defer] green-500 (#40916C) on white ~3.7:1 below AA for body text — design-token decision; reserve for large text or darken in a theme pass [app/assets/tailwind/daisyui-theme.mjs] — deferred
+- [x] [Review][Defer] daisyUI radius tokens (`--radius-field/selector/box`) diverge from DESIGN.md 6/10/16 scale — design-token reconciliation [app/assets/tailwind/daisyui-theme.mjs] — deferred
