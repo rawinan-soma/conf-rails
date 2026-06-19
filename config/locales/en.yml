@@ -29,6 +29,11 @@ en:
     authentication_failed: Sign-in failed. Please try again.
     session_timeout: Your session has expired. Please sign in again.
     signed_out: You have been signed out.
+  home:
+    index:
+      heading: Welcome to Conf Rails
+      signed_in_as: "You are signed in as %{email}."
+      title: Home
   layouts:
     application:
       sign_in: Sign In

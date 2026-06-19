@@ -1,11 +1,11 @@
-<% content_for :title, "Home" %>
+<% content_for :title, t(".title") %>
 
 <div class="hero min-h-screen">
   <div class="hero-content text-center">
     <div class="max-w-md">
-      <h1 class="text-3xl font-bold">Welcome to Conf Rails</h1>
+      <h1 class="text-3xl font-bold"><%= t(".heading") %></h1>
       <p class="py-6 text-base-content/70">
-        You are signed in as <%= current_user&.email %>.
+        <%= t(".signed_in_as", email: current_user&.email) %>
       </p>
     </div>
   </div>

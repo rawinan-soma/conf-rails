@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  # Skip session timeout and authentication checks on public session actions
+  # Skip session timeout and authentication checks on public session actions.
+  # destroy is also skipped from require_authentication: sign-out must succeed
+  # even when a session has already expired or was never started — storing
+  # '/sign_out' (a DELETE-only path) as session[:return_to] and then issuing
+  # a GET redirect to it post-login would cause a RoutingError.
   skip_before_action :enforce_session_timeout, only: %i[new create failure destroy]
-  skip_before_action :require_authentication, only: %i[new create failure]
+  skip_before_action :require_authentication, only: %i[new create failure destroy]
 
   # GET /sign_in
   def new

@@ -127,9 +127,10 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       "/"               => "/"
     }
     reject = [
-      "//evil.example.com",   # protocol-relative
-      "/\\evil.example.com",  # backslash → browser-normalized to //
-      "/\\/evil.example.com", # backslash-slash
+      "//evil.example.com",    # protocol-relative
+      "/\\evil.example.com",   # backslash → browser-normalized to //
+      "/\\/evil.example.com",  # backslash-slash
+      "/%2Fevil.example.com",  # percent-encoded "//evil.example.com" — open redirect bypass
       "http://evil.example.com",
       "https://evil.example.com",
       "javascript:alert(1)",

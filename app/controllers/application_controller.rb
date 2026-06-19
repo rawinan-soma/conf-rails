@@ -54,11 +54,17 @@ class ApplicationController < ActionController::Base
     url = session.delete(:return_to)
     return unless url
 
-    # Only allow a single-leading-slash relative path. Reject protocol-relative
-    # ("//host") and backslash-normalized ("/\host", "/\\host") forms, which
-    # browsers treat as "//host" → external redirect (open redirect).
-    return unless url.start_with?("/")
-    return if url.start_with?("//", "/\\", "/\/")
+    # Decode percent-encoding before validation so that "/%2Fevil.com" (which
+    # decodes to "//evil.com" in the browser) is caught by the guard below.
+    decoded = URI::DEFAULT_PARSER.unescape(url) rescue nil
+    return unless decoded
+
+    # Only allow a single-leading-slash relative path. Reject:
+    #   "//host"   — protocol-relative URL
+    #   "/\host"   — backslash-normalized (browsers treat as "//host")
+    #   "/\/host"  — slash-backslash-slash variant (use single-quoted literal)
+    return unless decoded.start_with?("/")
+    return if decoded.start_with?("//", "/\\", '/\/')
 
     url
   end
