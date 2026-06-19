@@ -32,7 +32,7 @@ en:
   home:
     index:
       heading: Welcome to Conf Rails
-      signed_in_as: "You are signed in as %{email}."
+      signed_in_as: You are signed in as %{email}.
       title: Home
   layouts:
     application:
