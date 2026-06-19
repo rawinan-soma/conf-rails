@@ -16,6 +16,12 @@ config/credentials/*.key
 .claude/bad-session-state.json
 .worktrees/
 
+# Rails runtime
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+
 # Editor / misc
 *.swp
 *~
