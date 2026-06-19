@@ -1,4 +1,25 @@
 ---
 en:
+  common:
+    cancel: Cancel
+    close: Close
+    confirm: Confirm
+    empty_state:
+      no_results: No results found
+    loading: Loading...
+    required_field: required
+  components:
+    button:
+      loading_text: Please wait...
+    empty_state:
+      default_message: Nothing here yet
+    modal:
+      close_label: Close dialog
+    status_badge:
+      cancelled: Cancelled
+      registered: Registered
+    toast:
+      error_prefix: Error
+      success_prefix: Success
   mailers:
     sender_display: Conf Rails

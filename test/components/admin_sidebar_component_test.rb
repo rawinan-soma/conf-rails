@@ -12,20 +12,11 @@
 require "test_helper"
 
 class AdminSidebarComponentTest < ViewComponent::TestCase
-  let(:nav_items) do
-    [
-      { label: "Dashboard", path: "/admin", active: true },
-      { label: "Conferences", path: "/admin/conferences", active: false },
-      { label: "Rooms", path: "/admin/rooms", active: false }
-    ]
-  end
-
   # ---------------------------------------------------------------------------
   # P1 — Renders all navigation items
   # ---------------------------------------------------------------------------
 
   test "[P1] renders all provided navigation items" do
-    skip "RED PHASE — AdminSidebarComponent not yet implemented"
     items = [
       { label: "Dashboard", path: "/admin", active: true },
       { label: "Conferences", path: "/admin/conferences", active: false },
@@ -42,7 +33,6 @@ class AdminSidebarComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] active nav item has active highlight class" do
-    skip "RED PHASE — AdminSidebarComponent not yet implemented"
     items = [
       { label: "Dashboard", path: "/admin", active: true },
       { label: "Conferences", path: "/admin/conferences", active: false }
@@ -56,7 +46,6 @@ class AdminSidebarComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] inactive nav items do not have active class" do
-    skip "RED PHASE — AdminSidebarComponent not yet implemented"
     items = [
       { label: "Conferences", path: "/admin/conferences", active: false }
     ]
@@ -69,7 +58,6 @@ class AdminSidebarComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] navigation item links point to correct paths" do
-    skip "RED PHASE — AdminSidebarComponent not yet implemented"
     items = [
       { label: "Rooms", path: "/admin/rooms", active: false }
     ]
@@ -82,7 +70,6 @@ class AdminSidebarComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] sidebar has green-900 background wrapper class" do
-    skip "RED PHASE — AdminSidebarComponent not yet implemented"
     render_inline(AdminSidebarComponent.new(nav_items: []))
     assert_selector "[class*='bg-green-900'], [class*='bg-base-300'], nav"
   end
@@ -92,7 +79,6 @@ class AdminSidebarComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] renders empty sidebar without raising" do
-    skip "RED PHASE — AdminSidebarComponent not yet implemented"
     assert_nothing_raised do
       render_inline(AdminSidebarComponent.new(nav_items: []))
     end

@@ -17,7 +17,6 @@ class SkeletonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] card variant renders skeleton element" do
-    skip "RED PHASE — SkeletonComponent not yet implemented"
     render_inline(SkeletonComponent.new(variant: :card))
     assert_selector ".skeleton, [data-skeleton]"
   end
@@ -27,7 +26,6 @@ class SkeletonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] list_row variant renders skeleton element" do
-    skip "RED PHASE — SkeletonComponent not yet implemented"
     render_inline(SkeletonComponent.new(variant: :list_row))
     assert_selector ".skeleton, [data-skeleton]"
   end
@@ -37,7 +35,6 @@ class SkeletonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] table_row variant renders multiple skeleton rows when rows kwarg given" do
-    skip "RED PHASE — SkeletonComponent not yet implemented"
     render_inline(SkeletonComponent.new(variant: :table_row, rows: 3))
     assert_selector ".skeleton", minimum: 3
   end
@@ -47,7 +44,6 @@ class SkeletonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] calendar_grid variant renders skeleton element" do
-    skip "RED PHASE — SkeletonComponent not yet implemented"
     render_inline(SkeletonComponent.new(variant: :calendar_grid))
     assert_selector ".skeleton, [data-skeleton]"
   end
@@ -57,7 +53,6 @@ class SkeletonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] renders default variant without raising" do
-    skip "RED PHASE — SkeletonComponent not yet implemented"
     assert_nothing_raised do
       render_inline(SkeletonComponent.new)
     end
@@ -68,7 +63,6 @@ class SkeletonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] defaults to 1 row when rows kwarg not provided" do
-    skip "RED PHASE — SkeletonComponent not yet implemented"
     render_inline(SkeletonComponent.new(variant: :list_row))
     assert_selector ".skeleton", count: 1
   end

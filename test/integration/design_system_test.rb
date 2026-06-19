@@ -19,35 +19,30 @@ class DesignSystemTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] daisyui-theme.mjs defines the forest-copper theme" do
-    skip "RED PHASE — Task 1 (daisyui-theme.mjs) not yet implemented"
     theme_file = File.read(Rails.root.join("app/assets/tailwind/daisyui-theme.mjs"))
     assert_match "forest-copper", theme_file,
                  "daisyui-theme.mjs must define the 'forest-copper' custom theme"
   end
 
   test "[P0] theme maps green-700 (#2D6A4F) as primary color" do
-    skip "RED PHASE — Task 1 (daisyui-theme.mjs) not yet implemented"
     theme_file = File.read(Rails.root.join("app/assets/tailwind/daisyui-theme.mjs"))
     assert_match "#2D6A4F", theme_file,
                  "Theme must define green-700 (#2D6A4F) as the primary color"
   end
 
   test "[P0] theme maps copper (#B5651D) as secondary color" do
-    skip "RED PHASE — Task 1 (daisyui-theme.mjs) not yet implemented"
     theme_file = File.read(Rails.root.join("app/assets/tailwind/daisyui-theme.mjs"))
     assert_match "#B5651D", theme_file,
                  "Theme must define copper (#B5651D) as the secondary/accent color"
   end
 
   test "[P0] theme maps cream (#FAFAF7) as base-100 background" do
-    skip "RED PHASE — Task 1 (daisyui-theme.mjs) not yet implemented"
     theme_file = File.read(Rails.root.join("app/assets/tailwind/daisyui-theme.mjs"))
     assert_match "#FAFAF7", theme_file,
                  "Theme must define cream (#FAFAF7) as base-100 page background"
   end
 
   test "[P1] theme maps danger color (#B3261E)" do
-    skip "RED PHASE — Task 1 (daisyui-theme.mjs) not yet implemented"
     theme_file = File.read(Rails.root.join("app/assets/tailwind/daisyui-theme.mjs"))
     assert_match "#B3261E", theme_file,
                  "Theme must define danger (#B3261E) for destructive actions"
@@ -58,7 +53,6 @@ class DesignSystemTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] application layout includes Google Fonts link for Noto Thai fonts" do
-    skip "RED PHASE — Task 2 (Thai typography) not yet implemented"
     layout = File.read(Rails.root.join("app/views/layouts/application.html.erb"))
     assert_match "fonts.googleapis.com", layout,
                  "application layout must include Google Fonts CDN link for Noto Thai"
@@ -67,24 +61,21 @@ class DesignSystemTest < ActiveSupport::TestCase
   end
 
   test "[P0] application CSS defines line-height 1.65 for body" do
-    skip "RED PHASE — Task 2 (Thai typography) not yet implemented"
     css = File.read(Rails.root.join("app/assets/tailwind/application.css"))
     # Body line-height ≥1.65 is a hard minimum for Thai vowel/tone marks
-    assert_match(/line-height:\s*1\.6[5-9]|line-height:\s*[2-9]/, css),
-                 "application.css must set body line-height to at least 1.65 for Thai typography"
+    assert_match(/line-height:\s*1\.6[5-9]|line-height:\s*[2-9]/, css,
+                 "application.css must set body line-height to at least 1.65 for Thai typography")
   end
 
   test "[P1] application CSS defines minimum font-size 14px" do
-    skip "RED PHASE — Task 2 (Thai typography) not yet implemented"
     css = File.read(Rails.root.join("app/assets/tailwind/application.css"))
-    assert_match(/font-size.*14px|--fs-small:\s*14px/, css),
-                 "application.css must enforce 14px as the minimum font size"
+    assert_match(/font-size.*14px|--fs-small:\s*14px/, css,
+                 "application.css must enforce 14px as the minimum font size")
   end
 
   test "[P1] application CSS defines display type scale at 32px" do
-    skip "RED PHASE — Task 2 (Thai typography) not yet implemented"
     css = File.read(Rails.root.join("app/assets/tailwind/application.css"))
-    assert_match(/32px/, css), "application.css must define display size at 32px"
+    assert_match(/32px/, css, "application.css must define display size at 32px")
   end
 
   # ---------------------------------------------------------------------------
@@ -92,17 +83,15 @@ class DesignSystemTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] application layout has theme-color meta tag" do
-    skip "RED PHASE — Task 3 (app shell layout) not yet implemented"
     layout = File.read(Rails.root.join("app/views/layouts/application.html.erb"))
     assert_match 'name="theme-color"', layout,
                  "layout must include <meta name='theme-color'> for mobile branding"
   end
 
   test "[P1] application layout includes flash container for ToastComponent" do
-    skip "RED PHASE — Task 3 (app shell layout) not yet implemented"
     layout = File.read(Rails.root.join("app/views/layouts/application.html.erb"))
-    assert_match(/flash|toast|Toast/, layout),
-                 "layout must include flash/toast message area"
+    assert_match(/flash|toast|Toast/, layout,
+                 "layout must include flash/toast message area")
   end
 
   # ---------------------------------------------------------------------------
@@ -110,13 +99,11 @@ class DesignSystemTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] app/components/ directory exists" do
-    skip "RED PHASE — Task 4 (ViewComponent infrastructure) not yet implemented"
     assert Dir.exist?(Rails.root.join("app/components")),
            "app/components/ directory must exist"
   end
 
   test "[P0] ApplicationComponent base class exists and inherits ViewComponent::Base" do
-    skip "RED PHASE — Task 4 (ViewComponent infrastructure) not yet implemented"
     assert defined?(ApplicationComponent),
            "ApplicationComponent must be defined"
     assert ApplicationComponent < ViewComponent::Base,
@@ -124,7 +111,6 @@ class DesignSystemTest < ActiveSupport::TestCase
   end
 
   test "[P1] ViewComponent initializer exists" do
-    skip "RED PHASE — Task 4 (ViewComponent infrastructure) not yet implemented"
     assert File.exist?(Rails.root.join("config/initializers/view_component.rb")),
            "config/initializers/view_component.rb must exist"
   end
@@ -134,7 +120,6 @@ class DesignSystemTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] admin layout file exists" do
-    skip "RED PHASE — Task 15 (AdminSidebarComponent + admin layout) not yet implemented"
     assert File.exist?(Rails.root.join("app/views/layouts/admin.html.erb")),
            "app/views/layouts/admin.html.erb must exist"
   end
@@ -144,43 +129,36 @@ class DesignSystemTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] en.yml contains common.cancel key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("common.cancel", :en),
            "en.yml must define 'common.cancel' key"
   end
 
   test "[P0] en.yml contains common.confirm key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("common.confirm", :en),
            "en.yml must define 'common.confirm' key"
   end
 
   test "[P0] en.yml contains common.close key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("common.close", :en),
            "en.yml must define 'common.close' key"
   end
 
   test "[P0] en.yml contains common.loading key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("common.loading", :en),
            "en.yml must define 'common.loading' key"
   end
 
   test "[P0] en.yml contains components.status_badge.registered key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("components.status_badge.registered", :en),
            "en.yml must define 'components.status_badge.registered'"
   end
 
   test "[P0] en.yml contains components.status_badge.cancelled key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("components.status_badge.cancelled", :en),
            "en.yml must define 'components.status_badge.cancelled'"
   end
 
   test "[P0] th.yml mirrors en.yml key-for-key (i18n-tasks health)" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     # Primary enforcement is CI: `bundle exec i18n-tasks health` passes with 0 errors.
     # This test verifies the sampled keys exist in both locales.
     sampled_keys = %w[
@@ -195,25 +173,21 @@ class DesignSystemTest < ActiveSupport::TestCase
   end
 
   test "[P1] en.yml contains components.modal.close_label key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("components.modal.close_label", :en),
            "en.yml must define 'components.modal.close_label'"
   end
 
   test "[P1] en.yml contains components.toast.success_prefix key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("components.toast.success_prefix", :en),
            "en.yml must define 'components.toast.success_prefix'"
   end
 
   test "[P1] en.yml contains components.toast.error_prefix key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("components.toast.error_prefix", :en),
            "en.yml must define 'components.toast.error_prefix'"
   end
 
   test "[P1] en.yml contains components.empty_state.default_message key" do
-    skip "RED PHASE — Task 16 (i18n expansion) not yet implemented"
     assert I18n.exists?("components.empty_state.default_message", :en),
            "en.yml must define 'components.empty_state.default_message'"
   end
@@ -223,7 +197,6 @@ class DesignSystemTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] no hardcoded user-visible strings in component .html.erb files" do
-    skip "RED PHASE — Task 16 + 17 (all component templates) not yet implemented"
     component_erb_files = Dir.glob(Rails.root.join("app/components/**/*.html.erb"))
     assert component_erb_files.any?,
            "There must be component .html.erb templates in app/components/"
@@ -242,7 +215,6 @@ class DesignSystemTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] application.css defines --radius-sm, --radius-md, --radius-lg custom properties" do
-    skip "RED PHASE — Task 2 (CSS custom properties) not yet implemented"
     css = File.read(Rails.root.join("app/assets/tailwind/application.css"))
     assert_match "--radius-sm", css, "Must define --radius-sm (6px)"
     assert_match "--radius-md", css, "Must define --radius-md (10px)"
@@ -250,7 +222,6 @@ class DesignSystemTest < ActiveSupport::TestCase
   end
 
   test "[P2] application.css defines --shadow-1, --shadow-2, --shadow-3 custom properties" do
-    skip "RED PHASE — Task 2 (CSS custom properties) not yet implemented"
     css = File.read(Rails.root.join("app/assets/tailwind/application.css"))
     assert_match "--shadow-1", css, "Must define --shadow-1"
     assert_match "--shadow-2", css, "Must define --shadow-2"

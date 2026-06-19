@@ -17,13 +17,11 @@ class ToggleComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders label text beside the toggle" do
-    skip "RED PHASE — ToggleComponent not yet implemented"
     render_inline(ToggleComponent.new(attribute: :catering_enabled, label: "Catering"))
     assert_selector "label", text: "Catering"
   end
 
   test "[P0] toggle is associated with its label for accessibility" do
-    skip "RED PHASE — ToggleComponent not yet implemented"
     render_inline(ToggleComponent.new(attribute: :catering_enabled, label: "Catering"))
     input = page.find("input[type='checkbox']")
     label = page.find("label")
@@ -39,7 +37,6 @@ class ToggleComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders unchecked by default" do
-    skip "RED PHASE — ToggleComponent not yet implemented"
     render_inline(ToggleComponent.new(attribute: :registration_enabled, label: "Registration"))
     assert_selector "input[type='checkbox']:not([checked])"
   end
@@ -49,7 +46,6 @@ class ToggleComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] renders checked when checked kwarg is true" do
-    skip "RED PHASE — ToggleComponent not yet implemented"
     render_inline(ToggleComponent.new(attribute: :catering_enabled, label: "Catering",
                                        checked: true))
     assert_selector "input[type='checkbox'][checked]"
@@ -60,7 +56,6 @@ class ToggleComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] input uses daisyUI toggle class" do
-    skip "RED PHASE — ToggleComponent not yet implemented"
     render_inline(ToggleComponent.new(attribute: :catering_enabled, label: "Catering"))
     assert_selector "input[type='checkbox'].toggle"
   end
@@ -70,7 +65,6 @@ class ToggleComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] renders toggle with correct name attribute when form kwarg provided" do
-    skip "RED PHASE — ToggleComponent not yet implemented"
     # Simulate without a real form builder — test standalone attribute rendering
     render_inline(ToggleComponent.new(attribute: :catering_enabled, label: "Catering"))
     assert_selector "input[type='checkbox']"

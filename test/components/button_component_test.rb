@@ -19,14 +19,12 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders primary button with label" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Submit"))
     assert_selector "button", text: "Submit"
     assert_selector "button.btn-primary"
   end
 
   test "[P0] primary button has btn-primary class by default" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Save"))
     assert_selector "button[type='button'].btn-primary"
   end
@@ -36,7 +34,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] loading state disables button and shows spinner" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Saving...", loading: true))
     assert_selector "button[disabled]"
     assert_selector "button.loading"
@@ -47,7 +44,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders as anchor tag when href is provided" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Go", href: "/conferences"))
     assert_selector "a[href='/conferences']", text: "Go"
     assert_no_selector "button"
@@ -58,7 +54,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] renders secondary variant" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Cancel", variant: :secondary))
     assert_selector "button.btn-secondary", text: "Cancel"
   end
@@ -68,7 +63,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] renders ghost variant" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "More", variant: :ghost))
     assert_selector "button.btn-ghost", text: "More"
   end
@@ -78,7 +72,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] renders disabled state with cream-200 fill and ink-3 text" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Disabled", disabled: true))
     assert_selector "button[disabled]"
   end
@@ -88,7 +81,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] accepts type kwarg and sets button type attribute" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Submit Form", type: :submit))
     assert_selector "button[type='submit']"
   end
@@ -98,7 +90,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] button element exists for tap-target verification" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Tap Me"))
     # Tap target ≥44px is enforced through CSS padding.
     # This test verifies the element is rendered so visual QA can confirm size.
@@ -110,7 +101,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] forwards data attributes to the rendered element" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Open", data: { controller: "modal", action: "modal#open" }))
     assert_selector "button[data-controller='modal']"
   end
@@ -120,7 +110,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] label is rendered from kwarg not hardcoded i18n key" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Custom Label"))
     assert_text "Custom Label"
     # No hardcoded text inside component — label always comes from caller
@@ -131,7 +120,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] anchor tag forwards method kwarg via data-turbo-method" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Delete", href: "/conferences/1", method: :delete))
     assert_selector "a[href='/conferences/1'][data-turbo-method='delete']"
   end
@@ -141,7 +129,6 @@ class ButtonComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] additional CSS classes are merged" do
-    skip "RED PHASE — ButtonComponent not yet implemented"
     render_inline(ButtonComponent.new(label: "Wide", class: "w-full"))
     assert_selector "button.w-full"
   end

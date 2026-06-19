@@ -18,14 +18,13 @@ class StatusBadgeComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] registered status renders text label (not color-only)" do
-    skip "RED PHASE — StatusBadgeComponent not yet implemented"
     render_inline(StatusBadgeComponent.new(status: :registered))
-    assert_text I18n.t("components.status_badge.registered"),
-                "badge must show text label — color alone is not sufficient (WCAG)"
+    label = I18n.t("components.status_badge.registered")
+    assert page.has_text?(label),
+           "badge must show text label — color alone is not sufficient (WCAG)"
   end
 
   test "[P0] registered status applies green-100 background class" do
-    skip "RED PHASE — StatusBadgeComponent not yet implemented"
     render_inline(StatusBadgeComponent.new(status: :registered))
     # Expects a CSS class or inline style conveying registered visual state
     assert page.has_css?(".badge, [data-status='registered']"),
@@ -37,10 +36,10 @@ class StatusBadgeComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] cancelled status renders text label" do
-    skip "RED PHASE — StatusBadgeComponent not yet implemented"
     render_inline(StatusBadgeComponent.new(status: :cancelled))
-    assert_text I18n.t("components.status_badge.cancelled"),
-                "badge must show text label for cancelled status"
+    label = I18n.t("components.status_badge.cancelled")
+    assert page.has_text?(label),
+           "badge must show text label for cancelled status"
   end
 
   # ---------------------------------------------------------------------------
@@ -48,7 +47,6 @@ class StatusBadgeComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] badge has pill shape via daisyUI badge class" do
-    skip "RED PHASE — StatusBadgeComponent not yet implemented"
     render_inline(StatusBadgeComponent.new(status: :registered))
     assert_selector ".badge"
   end
@@ -58,7 +56,6 @@ class StatusBadgeComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] unknown status renders without raising" do
-    skip "RED PHASE — StatusBadgeComponent not yet implemented"
     # Future statuses from later epics must not blow up
     assert_nothing_raised do
       render_inline(StatusBadgeComponent.new(status: :pending_payment))
@@ -70,7 +67,6 @@ class StatusBadgeComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] badge exposes status as data attribute for test automation" do
-    skip "RED PHASE — StatusBadgeComponent not yet implemented"
     render_inline(StatusBadgeComponent.new(status: :registered))
     assert_selector "[data-status]"
   end

@@ -17,19 +17,16 @@ class ModalComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] modal element has role=dialog" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     render_inline(ModalComponent.new(title: "Confirm Deletion", id: "confirm-modal"))
     assert_selector "[role='dialog']"
   end
 
   test "[P0] modal has aria-modal=true" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     render_inline(ModalComponent.new(title: "Confirm", id: "confirm-modal"))
     assert_selector "[aria-modal='true']"
   end
 
   test "[P0] modal has aria-labelledby referencing the title element" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     render_inline(ModalComponent.new(title: "Deactivate Room", id: "deactivate-modal"))
     dialog = page.find("[role='dialog']")
     labelledby = dialog["aria-labelledby"]
@@ -44,7 +41,6 @@ class ModalComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] modal renders close button with aria label" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     render_inline(ModalComponent.new(title: "Confirm", id: "confirm-modal"))
     assert_selector "button[aria-label], button[title]"
   end
@@ -54,7 +50,6 @@ class ModalComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] modal root element has Stimulus controller attribute" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     render_inline(ModalComponent.new(title: "Confirm", id: "test-modal"))
     assert_selector "[data-controller]"
   end
@@ -64,7 +59,6 @@ class ModalComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] renders provided title" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     render_inline(ModalComponent.new(title: "Are you sure?", id: "confirm-modal"))
     assert_text "Are you sure?"
   end
@@ -74,7 +68,6 @@ class ModalComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] modal has the provided id attribute" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     render_inline(ModalComponent.new(title: "Confirm", id: "my-modal"))
     assert_selector "#my-modal, [data-modal-id='my-modal']"
   end
@@ -84,7 +77,6 @@ class ModalComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] danger variant renders without raising" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     assert_nothing_raised do
       render_inline(ModalComponent.new(title: "Deactivate Room?", id: "deactivate-modal",
                                         variant: :danger))
@@ -97,7 +89,6 @@ class ModalComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] modal uses daisyUI modal class" do
-    skip "RED PHASE — ModalComponent not yet implemented"
     render_inline(ModalComponent.new(title: "Info", id: "info-modal"))
     assert_selector ".modal"
   end

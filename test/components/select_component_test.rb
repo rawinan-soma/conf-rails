@@ -17,9 +17,8 @@ class SelectComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders select element with visible label" do
-    skip "RED PHASE — SelectComponent not yet implemented"
     render_inline(SelectComponent.new(attribute: :title, label: "Title",
-                                       options: [%w[Mr mr], %w[Mrs mrs], %w[Ms ms]]))
+                                       options: [ %w[Mr mr], %w[Mrs mrs], %w[Ms ms] ]))
     assert_selector "label", text: "Title"
     assert_selector "select"
     assert_selector "option[value='mr']", text: "Mr"
@@ -27,9 +26,8 @@ class SelectComponentTest < ViewComponent::TestCase
   end
 
   test "[P0] label is associated with select via for/id" do
-    skip "RED PHASE — SelectComponent not yet implemented"
     render_inline(SelectComponent.new(attribute: :meal_type, label: "Meal Type",
-                                       options: [%w[Standard standard], %w[Vegetarian vegetarian]]))
+                                       options: [ %w[Standard standard], %w[Vegetarian vegetarian] ]))
     label = page.find("label")
     select = page.find("select")
     assert_equal select["id"], label["for"],
@@ -41,9 +39,8 @@ class SelectComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders blank option when include_blank is provided" do
-    skip "RED PHASE — SelectComponent not yet implemented"
     render_inline(SelectComponent.new(attribute: :title, label: "Title",
-                                       options: [%w[Mr mr]],
+                                       options: [ %w[Mr mr] ],
                                        include_blank: "Select title..."))
     assert_selector "option[value='']", text: "Select title..."
   end
@@ -53,9 +50,8 @@ class SelectComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] renders error message when error kwarg provided" do
-    skip "RED PHASE — SelectComponent not yet implemented"
     render_inline(SelectComponent.new(attribute: :title, label: "Title",
-                                       options: [%w[Mr mr]],
+                                       options: [ %w[Mr mr] ],
                                        error: "can't be blank"))
     assert_text "can't be blank"
     assert page.has_css?(".select-error, [aria-invalid='true']"),
@@ -67,12 +63,11 @@ class SelectComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] meal type picker options are rendered correctly" do
-    skip "RED PHASE — SelectComponent not yet implemented"
     meal_options = [
-      ["Standard", "standard"],
-      ["Vegetarian", "vegetarian"],
-      ["Vegan", "vegan"],
-      ["Halal", "halal"]
+      [ "Standard", "standard" ],
+      [ "Vegetarian", "vegetarian" ],
+      [ "Vegan", "vegan" ],
+      [ "Halal", "halal" ]
     ]
     render_inline(SelectComponent.new(attribute: :meal_type, label: "Meal Type",
                                        options: meal_options))
@@ -86,9 +81,8 @@ class SelectComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] renders cleanly without error state by default" do
-    skip "RED PHASE — SelectComponent not yet implemented"
     render_inline(SelectComponent.new(attribute: :title, label: "Title",
-                                       options: [%w[Mr mr]]))
+                                       options: [ %w[Mr mr] ]))
     assert_no_selector ".select-error, [aria-invalid='true']"
   end
 end

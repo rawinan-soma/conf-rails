@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <title><%= content_for(:title) || "Conf Rails Admin" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#1B4332">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="/icon.png" type="image/png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="flex min-h-screen" style="background-color: var(--color-cream);">
+    <%= render(AdminSidebarComponent.new(nav_items: [])) %>
+
+    <div class="flex-1 flex flex-col">
+      <% if flash.any? %>
+        <div id="flash-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2">
+          <% flash.each do |type, message| %>
+            <%= render(ToastComponent.new(message: message, type: type.to_sym)) %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <main class="flex-1 p-6">
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>

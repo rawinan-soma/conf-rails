@@ -1,0 +1,6 @@
+<div class="text-center py-12 px-4">
+  <p class="mb-4" style="color: var(--color-ink-2);"><%= @message %></p>
+  <% if has_action? %>
+    <%= render(ButtonComponent.new(label: @action_label, href: @action_path, variant: :primary)) %>
+  <% end %>
+</div>

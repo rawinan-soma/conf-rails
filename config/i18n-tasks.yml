@@ -1,0 +1,21 @@
+# i18n-tasks configuration
+# https://github.com/glebm/i18n-tasks#configuration
+
+base_locale: en
+locales: [en, th]
+
+data:
+  read:
+    - config/locales/%{locale}.yml
+  write:
+    - config/locales/%{locale}.yml
+
+ignore_unused:
+  # Keys used via dynamic i18n lookup in components (pattern: I18n.t(key) where key is variable)
+  - 'components.toast.*_prefix'
+  # Keys defined for future story use (common actions, statuses, etc.)
+  - 'common.cancel'
+  - 'common.confirm'
+  - 'common.loading'
+  - 'common.empty_state.*'
+  - 'components.button.loading_text'

@@ -17,18 +17,17 @@ class FormFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders visible label above input" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :name, label: "Full Name"))
     assert_selector "label", text: "Full Name"
     assert_selector "input"
     # Label must appear before input (not placeholder-only)
-    label_pos = page.html.index("<label")
-    input_pos = page.html.index("<input")
+    html = page.native.to_html
+    label_pos = html.index("<label")
+    input_pos = html.index("<input")
     assert label_pos < input_pos, "label must appear before input in DOM order"
   end
 
   test "[P0] does not rely on placeholder as the only label (WCAG)" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :email, label: "Email"))
     assert_selector "label", text: "Email"
     # The component must not omit the <label> element
@@ -40,7 +39,6 @@ class FormFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders error message below field when error kwarg provided" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :email, label: "Email",
                                          error: "can't be blank"))
     assert_selector "[aria-describedby]"
@@ -48,7 +46,6 @@ class FormFieldComponentTest < ViewComponent::TestCase
   end
 
   test "[P0] input references error message via aria-describedby" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :email, label: "Email",
                                          error: "is invalid"))
     input = page.find("input")
@@ -62,7 +59,6 @@ class FormFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] required field shows asterisk indicator after label" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :name, label: "Name", required: true))
     assert_text "*"
     assert_selector "input[required]"
@@ -73,7 +69,6 @@ class FormFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] renders hint text below label when hint kwarg provided" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :name, label: "Name",
                                          hint: "Enter your full legal name"))
     assert_text "Enter your full legal name"
@@ -84,7 +79,6 @@ class FormFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] label for attribute matches input id" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :email, label: "Email"))
     label = page.find("label")
     input = page.find("input")
@@ -97,7 +91,6 @@ class FormFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] renders cleanly without error when no error kwarg given" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :name, label: "Name"))
     assert_no_selector ".field-error, .text-danger, [aria-invalid='true']"
   end
@@ -107,7 +100,6 @@ class FormFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] error state applies danger border class to input" do
-    skip "RED PHASE — FormFieldComponent not yet implemented"
     render_inline(FormFieldComponent.new(attribute: :email, label: "Email",
                                          error: "is invalid"))
     # Danger border class expected on the wrapper or input

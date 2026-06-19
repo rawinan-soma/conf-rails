@@ -17,7 +17,6 @@ class ToastComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] success toast shows prefix word or icon (not color-only)" do
-    skip "RED PHASE — ToastComponent not yet implemented"
     render_inline(ToastComponent.new(message: "Conference saved.", type: :success))
     # Must show a prefix like "Success" or an icon element, not rely on color alone
     has_prefix = page.has_text?(I18n.t("components.toast.success_prefix"))
@@ -27,7 +26,6 @@ class ToastComponentTest < ViewComponent::TestCase
   end
 
   test "[P0] error toast shows prefix word or icon (not color-only)" do
-    skip "RED PHASE — ToastComponent not yet implemented"
     render_inline(ToastComponent.new(message: "Failed to save.", type: :error))
     has_prefix = page.has_text?(I18n.t("components.toast.error_prefix"))
     has_icon = page.has_css?("[aria-hidden='true'], svg, .icon")
@@ -40,7 +38,6 @@ class ToastComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders the message kwarg as text" do
-    skip "RED PHASE — ToastComponent not yet implemented"
     render_inline(ToastComponent.new(message: "Conference created successfully.", type: :success))
     assert_text "Conference created successfully."
   end
@@ -50,7 +47,6 @@ class ToastComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] info type renders without raising" do
-    skip "RED PHASE — ToastComponent not yet implemented"
     assert_nothing_raised do
       render_inline(ToastComponent.new(message: "Reminder sent.", type: :info))
     end
@@ -62,7 +58,6 @@ class ToastComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] toast has toast positioning class" do
-    skip "RED PHASE — ToastComponent not yet implemented"
     render_inline(ToastComponent.new(message: "Saved.", type: :success))
     assert_selector ".toast, [data-toast]"
   end
@@ -72,7 +67,6 @@ class ToastComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] toast element has Stimulus controller attribute for auto-dismiss" do
-    skip "RED PHASE — ToastComponent not yet implemented"
     render_inline(ToastComponent.new(message: "Saved.", type: :success))
     # Stimulus controller for auto-dismiss via setTimeout
     assert_selector "[data-controller]"

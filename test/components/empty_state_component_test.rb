@@ -17,7 +17,6 @@ class EmptyStateComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] renders message text" do
-    skip "RED PHASE — EmptyStateComponent not yet implemented"
     render_inline(EmptyStateComponent.new(
                     message: "No bookings yet",
                     action_label: "Create booking",
@@ -27,7 +26,6 @@ class EmptyStateComponentTest < ViewComponent::TestCase
   end
 
   test "[P0] renders primary action as a link" do
-    skip "RED PHASE — EmptyStateComponent not yet implemented"
     render_inline(EmptyStateComponent.new(
                     message: "No bookings yet",
                     action_label: "Create booking",
@@ -41,7 +39,6 @@ class EmptyStateComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] does not render large illustration images" do
-    skip "RED PHASE — EmptyStateComponent not yet implemented"
     render_inline(EmptyStateComponent.new(
                     message: "No rooms yet",
                     action_label: "Add room",
@@ -56,7 +53,6 @@ class EmptyStateComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] action link has primary button styling" do
-    skip "RED PHASE — EmptyStateComponent not yet implemented"
     render_inline(EmptyStateComponent.new(
                     message: "No conferences yet",
                     action_label: "Create conference",
@@ -70,7 +66,6 @@ class EmptyStateComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] renders default i18n message when no message provided" do
-    skip "RED PHASE — EmptyStateComponent not yet implemented"
     render_inline(EmptyStateComponent.new(action_label: "Add item", action_path: "/items/new"))
     assert_text I18n.t("components.empty_state.default_message")
   end
@@ -80,7 +75,6 @@ class EmptyStateComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] renders cleanly without action when action_path is nil" do
-    skip "RED PHASE — EmptyStateComponent not yet implemented"
     assert_nothing_raised do
       render_inline(EmptyStateComponent.new(message: "Nothing here yet"))
     end

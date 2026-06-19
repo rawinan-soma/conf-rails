@@ -17,7 +17,6 @@ class ReadOnlyFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] renders label and value text" do
-    skip "RED PHASE — ReadOnlyFieldComponent not yet implemented"
     render_inline(ReadOnlyFieldComponent.new(label: "Organizer", value: "Rawinan Soma"))
     assert_selector "label", text: "Organizer"
     assert_text "Rawinan Soma"
@@ -28,7 +27,6 @@ class ReadOnlyFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] value is not rendered as a focusable input element" do
-    skip "RED PHASE — ReadOnlyFieldComponent not yet implemented"
     render_inline(ReadOnlyFieldComponent.new(label: "Phone", value: "+66 81 234 5678"))
     # Must NOT be an editable input — it's a display-only field
     assert_no_selector "input:not([readonly]):not([disabled])"
@@ -40,7 +38,6 @@ class ReadOnlyFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] read-only field has visually distinct styling from editable field" do
-    skip "RED PHASE — ReadOnlyFieldComponent not yet implemented"
     render_inline(ReadOnlyFieldComponent.new(label: "Contact", value: "test@example.com"))
     # cream-100 fill class or a .read-only-field wrapper distinguishing it
     assert page.has_css?(".read-only-field, [data-read-only], .bg-cream-100, [class*='read-only']"),
@@ -52,7 +49,6 @@ class ReadOnlyFieldComponentTest < ViewComponent::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] renders gracefully when value is blank" do
-    skip "RED PHASE — ReadOnlyFieldComponent not yet implemented"
     assert_nothing_raised do
       render_inline(ReadOnlyFieldComponent.new(label: "Notes", value: nil))
     end
