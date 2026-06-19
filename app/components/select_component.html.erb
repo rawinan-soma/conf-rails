@@ -1,0 +1,31 @@
+<div class="form-control mb-4">
+  <label class="label" for="<%= field_id %>">
+    <span class="label-text font-medium">
+      <%= @label %><% if required? %> <span class="text-danger" style="color: var(--color-danger);" aria-label="<%= t('common.required_field') %>">*</span><% end %>
+    </span>
+  </label>
+  <% if @form && @attribute %>
+    <%= @form.select @attribute, @options,
+          { include_blank: @include_blank },
+          id: field_id,
+          class: "select select-bordered w-full #{@error.present? ? 'select-error' : ''}",
+          "aria-describedby": (@error.present? ? "#{@attribute}-error" : nil) %>
+  <% else %>
+    <select id="<%= field_id %>"
+            class="select select-bordered w-full <%= @error.present? ? 'select-error' : '' %>"
+            <%= "aria-describedby=\"#{@attribute}-error\"".html_safe if @error.present? && @attribute %>>
+      <% if @include_blank %>
+        <option value=""><%= @include_blank.is_a?(String) ? @include_blank : "" %></option>
+      <% end %>
+      <% Array(@options).each do |opt| %>
+        <% label, value = opt.is_a?(Array) ? opt : [opt, opt] %>
+        <option value="<%= value %>"><%= label %></option>
+      <% end %>
+    </select>
+  <% end %>
+  <% if @error && @attribute %>
+    <p id="<%= @attribute %>-error" class="text-small mt-1" role="alert"><%= @error %></p>
+  <% elsif @error %>
+    <p class="text-small mt-1" role="alert"><%= @error %></p>
+  <% end %>
+</div>

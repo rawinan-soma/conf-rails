@@ -2,3 +2,85 @@
 @source not "./daisyui{,*}.mjs";
 @plugin "./daisyui.mjs";
 @plugin "./daisyui-theme.mjs";
+
+/* Forest & Copper — custom properties */
+@layer base {
+  :root {
+    /* Spacing & Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+
+    /* Elevation */
+    --shadow-1: 0 1px 2px rgba(27,67,50,0.06);
+    --shadow-2: 0 2px 8px rgba(27,67,50,0.08);
+    --shadow-3: 0 8px 24px rgba(27,67,50,0.12);
+
+    /* Typography */
+    --font-heading: 'Noto Serif Thai', serif;
+    --font-body: 'Noto Sans Thai', sans-serif;
+    --fs-display: 32px;
+    --fs-h1: 28px;
+    --fs-h2: 22px;
+    --fs-h3: 18px;
+    --fs-body: 16px;
+    --fs-small: 14px;
+
+    /* Custom color aliases */
+    --color-green-900: #1B4332;
+    --color-green-700: #2D6A4F;
+    --color-green-500: #40916C;
+    --color-green-200: #95D5B2;
+    --color-green-100: #D8F3DC;
+    --color-copper: #B5651D;
+    --color-copper-light: #E8A96A;
+    --color-copper-bg: #FDF3E7;
+    --color-cream: #FAFAF7;
+    --color-cream-100: #F0EDE6;
+    --color-cream-200: #E8E3DA;
+    --color-card: #FFFFFF;
+    --color-border: #E0DBD3;
+    --color-ink: #1C1C1C;
+    --color-ink-2: #5A5A5A;
+    --color-ink-3: #9A9A9A;
+    --color-success-bg: #D8F3DC;
+    --color-warning-bg: #FDF3E7;
+    --color-danger: #B3261E;
+    --color-danger-bg: #FBEAE9;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: 1.65;
+    color: var(--color-ink);
+    background-color: var(--color-cream);
+  }
+
+  h1, h2, h3, h4, h5, h6, .display {
+    font-family: var(--font-heading);
+  }
+
+  .display { font-size: var(--fs-display); }
+  h1 { font-size: var(--fs-h1); }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  small, .text-small { font-size: var(--fs-small); }
+
+  /* WCAG 2.1 AA focus ring: visible >=2px green-500 on every interactive element.
+     Never remove an outline without this replacement. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible,
+  .btn:focus-visible,
+  .toggle:focus-visible,
+  .input:focus-visible,
+  .select:focus-visible {
+    outline: 2px solid var(--color-green-500);
+    outline-offset: 2px;
+  }
+}

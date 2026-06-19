@@ -1,0 +1,29 @@
+<div class="form-control mb-4">
+  <label class="label" for="<%= field_id %>">
+    <span class="label-text font-medium">
+      <%= @label %><% if required? %> <span class="text-danger" style="color: var(--color-danger);" aria-label="<%= t('common.required_field') %>">*</span><% end %>
+    </span>
+  </label>
+  <% if @form && @attribute %>
+    <%= @form.text_field @attribute,
+          id: field_id,
+          class: "input input-bordered w-full #{error? ? 'input-error' : ''}",
+          required: required? || nil,
+          "aria-describedby": (error? ? "#{@attribute}-error" : nil),
+          **@html_options %>
+  <% else %>
+    <input type="text"
+           id="<%= field_id %>"
+           class="input input-bordered w-full <%= error? ? 'input-error' : '' %>"
+           <%= 'required' if required? %>
+           <%= "aria-describedby=\"#{@attribute}-error\"".html_safe if error? && @attribute %>>
+  <% end %>
+  <% if @hint %>
+    <p class="text-small mt-1"><%= @hint %></p>
+  <% end %>
+  <% if error? && @attribute %>
+    <p id="<%= @attribute %>-error" class="text-small mt-1" role="alert"><%= @error %></p>
+  <% elsif error? %>
+    <p class="text-small mt-1" role="alert"><%= @error %></p>
+  <% end %>
+</div>
