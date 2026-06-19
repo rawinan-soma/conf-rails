@@ -32,15 +32,21 @@ end
 #   stub_omniauth_failure                # simulate IdP error
 # ---------------------------------------------------------------------------
 def stub_omniauth(uid: "omniauth-uid-test-001", email: "testuser@example.test")
-  OmniAuth.config.mock_auth[:openid_connect] = OmniAuth::AuthHash.new(
+  auth_hash = OmniAuth::AuthHash.new(
     provider: "openid_connect",
     uid: uid,
     info: OmniAuth::AuthHash::InfoHash.new(email: email)
   )
+  OmniAuth.config.mock_auth[:openid_connect] = auth_hash
+  # Also populate env_config so that integration tests hitting the callback URL
+  # directly (without going through /auth/openid_connect first) get the mock hash
+  # in request.env["omniauth.auth"] via the OmniAuth middleware test_mode flow.
+  Rails.application.env_config["omniauth.auth"] = auth_hash
 end
 
 def stub_omniauth_failure
   OmniAuth.config.mock_auth[:openid_connect] = :invalid_credentials
+  Rails.application.env_config.delete("omniauth.auth")
 end
 
 # ---------------------------------------------------------------------------

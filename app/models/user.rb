@@ -30,9 +30,14 @@ class User < ApplicationRecord
   # Returns an unpersisted (invalid) User when the IdP omits a required attribute
   # such as email — callers MUST check `persisted?` before starting a session.
   #
-  # Uses create_or_find_by for race safety: the DB unique index on (provider, uid)
-  # is the source of truth, so concurrent first-logins resolve to the same row
-  # instead of raising ActiveRecord::RecordNotUnique.
+  # Find-first strategy: existing users (the overwhelmingly common case after first
+  # login) are found with a single SELECT. New users are created with an INSERT;
+  # the DB unique index on (provider, uid) is the safety net for the rare concurrent
+  # first-login race — RecordNotUnique is rescued and the row is re-fetched.
+  # Note: create_or_find_by is NOT used here because Rails model validations
+  # (e.g. email uniqueness) can prevent the INSERT from reaching the DB, causing
+  # create_or_find_by to return an invalid unpersisted record instead of finding
+  # the existing row.
   def self.find_or_create_by_omniauth(auth)
     return nil if auth.nil?
 
@@ -40,12 +45,18 @@ class User < ApplicationRecord
     uid = auth.uid
     return nil if provider.blank? || uid.blank?
 
-    create_or_find_by(provider: provider, uid: uid) do |u|
-      u.email = auth.info&.email
-    end
+    # Fast path: user already exists (every login after the first)
+    existing = find_by(provider: provider, uid: uid)
+    return existing if existing
+
+    # Slow path: first-ever login — attempt to create
+    create!(provider: provider, uid: uid, email: auth.info&.email)
   rescue ActiveRecord::RecordNotUnique
-    # A non-(provider,uid) unique constraint (e.g. the email index) was violated.
-    # Treat as an authentication failure rather than crashing the callback.
+    # Concurrent first-login: another process already created the row.
     find_by(provider: provider, uid: uid)
+  rescue ActiveRecord::RecordInvalid
+    # Validation failed (e.g. blank email) — return an unsaved instance so the
+    # caller's `user&.persisted?` guard routes to the failure flow.
+    nil
   end
 end
