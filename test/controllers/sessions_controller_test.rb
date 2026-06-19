@@ -24,8 +24,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] GET /auth/openid_connect/callback creates session and redirects to root" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
 
     get "/auth/openid_connect/callback"
@@ -38,8 +36,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] OmniAuth callback creates a new User when uid is unknown" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "brand-new-uid-999", email: "newuser@example.test")
 
     assert_difference "User.count", 1 do
@@ -52,8 +48,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] OmniAuth callback finds existing User when uid is known" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
 
     assert_no_difference "User.count" do
@@ -62,8 +56,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] OmniAuth callback sets session[:user_id] to the found/created user's id" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
 
@@ -77,23 +69,22 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] OmniAuth callback redirects to session[:return_to] if set" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
 
-    # Simulate the require_authentication before_action storing return_to
-    get "/protected-page"  # triggers require_authentication which sets return_to
+    # Simulate the require_authentication before_action storing return_to by visiting
+    # a protected route (root_path = home#index, which requires authentication)
+    get root_path  # triggers require_authentication which sets session[:return_to] = "/"
+    assert_redirected_to new_session_path
+
     # Follow through with the OmniAuth callback
     get "/auth/openid_connect/callback"
 
-    assert_redirected_to "/protected-page",
+    assert_redirected_to root_path,
                          "After successful auth, must redirect to the original protected URL"
     assert_nil session[:return_to], "session[:return_to] must be cleared after use"
   end
 
   test "[P0] return_to URL with external domain is ignored (open redirect protection)" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
 
     # Inject a malicious return_to
@@ -114,8 +105,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] GET /auth/failure clears any partial session state" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     # Simulate a partially started session
     stub_omniauth_failure
 
@@ -128,8 +117,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] GET /auth/failure redirects to new_session_path" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth_failure
 
     get "/auth/failure"
@@ -138,8 +125,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] GET /auth/failure sets a flash alert" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth_failure
 
     get "/auth/failure"
@@ -153,8 +138,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P1] DELETE /sign_out clears session and redirects to new_session_path" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
     assert_not_nil session[:user_id], "Pre-condition: must be signed in"
@@ -167,8 +150,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "[P1] DELETE /sign_out calls reset_session (prevents session fixation)" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
     old_session_id = request.session.id.to_s
@@ -181,8 +162,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "[P1] DELETE /sign_out sets a signed-out flash notice" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
     delete sign_out_path
@@ -196,16 +175,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P2] GET /sign_in renders the sign-in page with HTTP 200" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     get new_session_path
 
     assert_response :success
   end
 
   test "[P2] sign-in page contains a POST form to /auth/openid_connect" do
-    skip "ATDD RED PHASE — implement SessionsController (Task 3) + routes (Task 4) before activating"
-
     get new_session_path
 
     assert_select "form[action='/auth/openid_connect'][method='post']",

@@ -1,0 +1,18 @@
+<% content_for :title, t(".title") %>
+
+<div class="flex flex-col items-center justify-center min-h-screen">
+  <div class="card w-96 bg-base-100 shadow-xl">
+    <div class="card-body items-center text-center">
+      <h1 class="card-title text-2xl"><%= t(".title") %></h1>
+
+      <div class="card-actions mt-4">
+        <%# OmniAuth 2.x requires POST to initiate auth (CSRF protection built-in).
+            data-turbo="false" prevents Turbo Drive intercepting the IdP redirect. %>
+        <%= button_to t(".sign_in_with_idp"), "/auth/openid_connect",
+            method: :post,
+            data: { turbo: false },
+            class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+</div>

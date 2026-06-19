@@ -26,8 +26,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] unauthenticated request to a protected page redirects to sign-in" do
-    skip "ATDD RED PHASE — implement ApplicationController#require_authentication (Task 5) before activating"
-
     # Assumes at least one controller uses `before_action :require_authentication`.
     # In this story the root path will redirect to sessions#new if unauthenticated.
     get root_path
@@ -37,8 +35,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] unauthenticated request stores the original URL in session[:return_to]" do
-    skip "ATDD RED PHASE — implement ApplicationController#require_authentication (Task 5) before activating"
-
     get root_path
 
     assert_equal root_path, session[:return_to],
@@ -50,8 +46,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] full sign-in flow: unauthenticated → IdP → callback → original URL" do
-    skip "ATDD RED PHASE — implement all Task 1-5 before activating"
-
     # Step 1: Visit a protected page (unauthenticated)
     get root_path
     assert_redirected_to new_session_path
@@ -74,8 +68,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] session expires after 30 minutes of inactivity" do
-    skip "ATDD RED PHASE — implement ApplicationController#enforce_session_timeout (Task 5) before activating"
-
     # Sign in
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
@@ -92,8 +84,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] session timeout sets a flash alert informing the user" do
-    skip "ATDD RED PHASE — implement ApplicationController#enforce_session_timeout (Task 5) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
 
@@ -106,8 +96,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] session does NOT expire before 30 minutes of inactivity" do
-    skip "ATDD RED PHASE — implement ApplicationController#enforce_session_timeout (Task 5) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
     assert_not_nil session[:user_id], "Pre-condition: must be signed in"
@@ -123,8 +111,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] inactivity timeout is a sliding window — activity resets the timer" do
-    skip "ATDD RED PHASE — implement ApplicationController#enforce_session_timeout (Task 5) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
 
@@ -144,8 +130,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] session timeout calls reset_session to prevent session fixation" do
-    skip "ATDD RED PHASE — implement ApplicationController#enforce_session_timeout (Task 5) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
     old_session_id = request.session.id.to_s
@@ -164,8 +148,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P1] INACTIVITY_TIMEOUT constant is exactly 30 minutes and not configurable" do
-    skip "ATDD RED PHASE — implement ApplicationController (Task 5) before activating"
-
     assert_equal 30.minutes.to_i, ApplicationController::INACTIVITY_TIMEOUT,
                  "INACTIVITY_TIMEOUT must be exactly 30 minutes (FR-093 — not configurable)"
   end
@@ -175,8 +157,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] OIDC callback failure does not create a session" do
-    skip "ATDD RED PHASE — implement SessionsController#failure (Task 3) before activating"
-
     stub_omniauth_failure
 
     get "/auth/failure"
@@ -186,8 +166,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] authentication failure renders a clear error message" do
-    skip "ATDD RED PHASE — implement failure view (Task 6) before activating"
-
     stub_omniauth_failure
 
     get "/auth/failure"
@@ -204,8 +182,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P1] session[:last_active_at] is updated on each authenticated request" do
-    skip "ATDD RED PHASE — implement ApplicationController#enforce_session_timeout (Task 5) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
 
@@ -225,8 +201,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P1] current_user returns the authenticated user for a valid session" do
-    skip "ATDD RED PHASE — implement ApplicationController#current_user (Task 5) before activating"
-
     stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
     get "/auth/openid_connect/callback"
 
@@ -241,8 +215,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P1] current_user returns nil for an unauthenticated request" do
-    skip "ATDD RED PHASE — implement ApplicationController#current_user (Task 5) before activating"
-
     get new_session_path
     assert_response :success
 

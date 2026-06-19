@@ -21,8 +21,6 @@ class UserTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P0] find_or_create_by_omniauth creates a new user from a valid auth hash" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     auth = OmniAuth::AuthHash.new(
       provider: "openid_connect",
       uid: "new-uid-test-001",
@@ -39,8 +37,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "[P0] find_or_create_by_omniauth returns existing user for the same provider/uid" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     auth = OmniAuth::AuthHash.new(
       provider: "openid_connect",
       uid: "test-uid-regular-001",
@@ -58,8 +54,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "[P0] find_or_create_by_omniauth does NOT update email on subsequent logins" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     auth = OmniAuth::AuthHash.new(
       provider: "openid_connect",
       uid: "test-uid-regular-001",
@@ -84,32 +78,24 @@ class UserTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] user is invalid without provider" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     user = User.new(uid: "uid-001", email: "test@example.test")
     assert_not user.valid?, "User without provider must be invalid"
     assert_includes user.errors[:provider], "can't be blank"
   end
 
   test "[P1] user is invalid without uid" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     user = User.new(provider: "openid_connect", email: "test@example.test")
     assert_not user.valid?, "User without uid must be invalid"
     assert_includes user.errors[:uid], "can't be blank"
   end
 
   test "[P1] user is invalid without email" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     user = User.new(provider: "openid_connect", uid: "uid-001")
     assert_not user.valid?, "User without email must be invalid"
     assert_includes user.errors[:email], "can't be blank"
   end
 
   test "[P1] user is invalid when provider/uid combination is not unique" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     User.create!(
       provider: "openid_connect",
       uid: "duplicate-uid-001",
@@ -130,15 +116,11 @@ class UserTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] admin? returns false for a regular user" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     user = User.new(provider: "openid_connect", uid: "uid-001", email: "test@example.test", admin: false)
     assert_not user.admin?, "admin? must return false for non-admin users"
   end
 
   test "[P1] admin? returns true for an admin user" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     user = User.new(provider: "openid_connect", uid: "uid-002", email: "admin@example.test", admin: true)
     assert user.admin?, "admin? must return true for admin users"
   end
@@ -148,8 +130,6 @@ class UserTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P1] profile_complete? returns false when profile_completed_at is nil" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     user = User.new(
       provider: "openid_connect",
       uid: "uid-003",
@@ -161,8 +141,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "[P1] profile_complete? returns true when profile_completed_at is set" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     user = User.new(
       provider: "openid_connect",
       uid: "uid-004",
@@ -178,8 +156,6 @@ class UserTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] User.admins scope returns only admin users" do
-    skip "ATDD RED PHASE — implement User model (Task 1) before activating"
-
     User.create!(provider: "openid_connect", uid: "uid-admin-001", email: "admin1@example.test", admin: true)
     User.create!(provider: "openid_connect", uid: "uid-regular-001", email: "regular1@example.test", admin: false)
 

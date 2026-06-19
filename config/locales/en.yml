@@ -25,5 +25,21 @@ en:
       error_prefix: Error
       info_prefix: Info
       success_prefix: Success
+  flash:
+    authentication_failed: Sign-in failed. Please try again.
+    session_timeout: Your session has expired. Please sign in again.
+    signed_out: You have been signed out.
+  layouts:
+    application:
+      sign_in: Sign In
+      sign_out: Sign Out
   mailers:
     sender_display: Conf Rails
+  sessions:
+    failure:
+      authentication_failed: Sign-in failed. Please try again.
+      back_to_sign_in: Back to Sign In
+      title: Authentication Failed
+    new:
+      sign_in_with_idp: Sign in with Organization Account
+      title: Sign In

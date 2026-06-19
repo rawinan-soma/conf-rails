@@ -1,0 +1,17 @@
+<% content_for :title, t(".title") %>
+
+<div class="flex flex-col items-center justify-center min-h-screen">
+  <div class="card w-96 bg-base-100 shadow-xl">
+    <div class="card-body items-center text-center">
+      <h1 class="card-title text-2xl"><%= t(".title") %></h1>
+
+      <div class="alert alert-error mt-4" role="alert">
+        <span><%= t(".authentication_failed") %></span>
+      </div>
+
+      <div class="card-actions mt-4">
+        <%= link_to t(".back_to_sign_in"), new_session_path, class: "btn btn-outline" %>
+      </div>
+    </div>
+  </div>
+</div>
