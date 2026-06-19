@@ -26,3 +26,9 @@ config/credentials/*.key
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Runtime directories
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep

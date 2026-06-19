@@ -9,6 +9,18 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Story 1.3: Authentication routes
+  # OmniAuth callback is GET because IdP redirects back with GET after auth.
+  # Constrain :provider to the single configured provider so arbitrary
+  # /auth/<x>/callback requests don't reach sessions#create with no omniauth.auth.
+  get  "/auth/:provider/callback", to: "sessions#create", as: :auth_callback,
+       constraints: { provider: /openid_connect/ }
+  get  "/auth/failure",            to: "sessions#failure", as: :auth_failure
+  get  "/sign_in",                 to: "sessions#new",    as: :new_session
+  delete "/sign_out",              to: "sessions#destroy", as: :sign_out
+
+  # Temporary protected root — will be replaced in Story 2.x or 1.5 with a real dashboard.
+  # Protected by ApplicationController#require_authentication — unauthenticated requests
+  # are redirected to new_session_path.
+  root to: "home#index"
 end

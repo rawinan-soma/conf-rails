@@ -26,6 +26,23 @@
   </head>
 
   <body>
+    <nav class="navbar bg-base-100 shadow-sm">
+      <div class="navbar-start">
+        <span class="text-lg font-bold">Conf Rails</span>
+      </div>
+      <div class="navbar-end">
+        <% if current_user %>
+          <%= button_to t("layouts.application.sign_out"), sign_out_path,
+              method: :delete,
+              data: { turbo: false },
+              class: "btn btn-ghost btn-sm" %>
+        <% else %>
+          <%= link_to t("layouts.application.sign_in"), new_session_path,
+              class: "btn btn-ghost btn-sm" %>
+        <% end %>
+      </div>
+    </nav>
+
     <%# Flash messages rendered as ToastComponent %>
     <% if flash.any? %>
       <div id="flash-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2">
@@ -35,7 +52,7 @@
       </div>
     <% end %>
 
-    <main>
+    <main class="container mx-auto mt-8 px-5 flex">
       <%= yield %>
     </main>
   </body>
