@@ -9,12 +9,23 @@ require "test_helper"
 class EmailInfrastructureTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
+  # Disable parallel workers for this test class.
+  # ActionMailer::Base.deliveries is a shared mutable array — parallel workers would cause
+  # race conditions across delivery-count assertions (assert_emails, deliveries.size).
+  parallelize(workers: 1)
+
+  # Clear the deliveries array before each test so delivery counts are isolated.
+  # ActiveJob::TestHelper auto-clears the job queue but NOT ActionMailer::Base.deliveries.
+  setup do
+    ActionMailer::Base.deliveries.clear
+  end
+
   # ---------------------------------------------------------------------------
   # AC #2 — deliver_later does NOT immediately deliver (async decoupling)
   # ---------------------------------------------------------------------------
 
   # AC #2 — deliver_later enqueues exactly one mail job (does not deliver immediately).
-  test "deliver_later enqueues mail without immediate delivery" do
+  test "[P0] deliver_later enqueues mail without immediate delivery" do
     # Verify no emails are delivered synchronously with deliver_later.
     assert_enqueued_emails(1) do
       InlineTestMailer.sample_email.deliver_later
@@ -25,7 +36,7 @@ class EmailInfrastructureTest < ActionDispatch::IntegrationTest
   end
 
   # AC #2 — After deliver_later, performing enqueued jobs delivers the mail.
-  test "perform_enqueued_jobs delivers the enqueued mail" do
+  test "[P0] perform_enqueued_jobs delivers the enqueued mail" do
     InlineTestMailer.sample_email.deliver_later
     assert_emails(1) { perform_enqueued_jobs }
   end
@@ -35,7 +46,7 @@ class EmailInfrastructureTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   # AC #2 — The triggering transaction commits independently of mail delivery.
-  test "deliver_later does not block the triggering transaction" do
+  test "[P0] deliver_later does not block the triggering transaction" do
     committed = false
     assert_enqueued_emails(1) do
       ActiveRecord::Base.transaction do
@@ -54,7 +65,7 @@ class EmailInfrastructureTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   # AC #3 — ApplicationMailer default :from resolves to RFC 5322 format with org name.
-  test "ApplicationMailer from address contains ENVOCC organization name" do
+  test "[P0] ApplicationMailer from address contains ENVOCC organization name" do
     from_lambda = ApplicationMailer.default[:from]
     resolved_from = from_lambda.respond_to?(:call) ? from_lambda.call : from_lambda
     assert_match(/ENVOCC/, resolved_from,
@@ -64,7 +75,7 @@ class EmailInfrastructureTest < ActionDispatch::IntegrationTest
   end
 
   # AC #3 — Delivered mail carries the correct From header (org name in from:).
-  test "delivered mail carries org name in From header" do
+  test "[P1] delivered mail carries org name in From header" do
     perform_enqueued_jobs do
       InlineTestMailer.sample_email.deliver_later
     end
@@ -81,7 +92,7 @@ class EmailInfrastructureTest < ActionDispatch::IntegrationTest
 
   # AC #1 — Mailer jobs route to the dedicated 'mailers' queue.
   # ActionMailer uses deliver_later_queue_name to route delivery jobs.
-  test "ApplicationMailer jobs route to mailers queue" do
+  test "[P1] ApplicationMailer jobs route to mailers queue" do
     assert_equal "mailers", ApplicationMailer.deliver_later_queue_name.to_s,
       "ApplicationMailer must route to 'mailers' queue via deliver_later_queue_name"
   end
@@ -91,13 +102,13 @@ class EmailInfrastructureTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   # AC #1/#3 — Stub mailer classes must be loadable (Solid Queue boot check).
-  test "BookingMailer stub class is defined and extends ApplicationMailer" do
+  test "[P1] BookingMailer stub class is defined and extends ApplicationMailer" do
     assert defined?(BookingMailer), "BookingMailer must be defined"
     assert BookingMailer < ApplicationMailer,
       "BookingMailer must extend ApplicationMailer to inherit sender display name"
   end
 
-  test "RegistrationMailer stub class is defined and extends ApplicationMailer" do
+  test "[P1] RegistrationMailer stub class is defined and extends ApplicationMailer" do
     assert defined?(RegistrationMailer), "RegistrationMailer must be defined"
     assert RegistrationMailer < ApplicationMailer,
       "RegistrationMailer must extend ApplicationMailer to inherit sender display name"
@@ -105,12 +116,12 @@ class EmailInfrastructureTest < ActionDispatch::IntegrationTest
 
   # AC #3 — Stub mailer methods raise NotImplementedError when delivered.
   # Note: ActionMailer class methods return MessageDelivery — the error is raised on delivery.
-  test "BookingMailer stub methods raise NotImplementedError on delivery" do
+  test "[P1] BookingMailer stub methods raise NotImplementedError on delivery" do
     assert_raises(NotImplementedError) { BookingMailer.confirmation(nil).deliver_now }
     assert_raises(NotImplementedError) { BookingMailer.cancellation(nil).deliver_now }
   end
 
-  test "RegistrationMailer stub methods raise NotImplementedError on delivery" do
+  test "[P1] RegistrationMailer stub methods raise NotImplementedError on delivery" do
     assert_raises(NotImplementedError) { RegistrationMailer.confirmation(nil).deliver_now }
     assert_raises(NotImplementedError) { RegistrationMailer.cancellation(nil).deliver_now }
     assert_raises(NotImplementedError) { RegistrationMailer.reminder(nil).deliver_now }

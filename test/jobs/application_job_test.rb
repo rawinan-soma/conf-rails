@@ -6,7 +6,8 @@ require "test_helper"
 # AC #1: Background jobs and recurring-task scheduler are operational with a dead-letter path.
 # AC #2: Triggering transaction commits even if send later fails (retry/backoff).
 class ApplicationJobTest < ActiveSupport::TestCase
-  include ActiveJob::TestHelper
+  # ActiveJob::TestHelper is already included globally in test_helper.rb.
+  # No need to include again here.
 
   # Inline test job — used to exercise ApplicationJob behavior without real job classes.
   class TestMailerJob < ApplicationJob
@@ -18,13 +19,13 @@ class ApplicationJobTest < ActiveSupport::TestCase
   end
 
   # AC #1 — ApplicationJob subclasses must respond to perform_now (job infrastructure loads).
-  test "ApplicationJob subclass responds to perform_now" do
+  test "[P1] ApplicationJob subclass responds to perform_now" do
     assert_respond_to TestMailerJob, :perform_now,
       "ApplicationJob subclasses must respond to perform_now"
   end
 
   # AC #1 — Retry configuration: ApplicationJob must retry on StandardError.
-  test "ApplicationJob retries on StandardError with exponential backoff" do
+  test "[P0] ApplicationJob retries on StandardError with exponential backoff" do
     # Verify retry handler is registered for StandardError
     retry_handlers = ApplicationJob.rescue_handlers.map(&:first)
     assert_includes retry_handlers.map(&:to_s), "StandardError",
@@ -32,7 +33,7 @@ class ApplicationJobTest < ActiveSupport::TestCase
   end
 
   # AC #1 — Discard on deserialization error (job record gone — don't retry forever).
-  test "ApplicationJob discards on DeserializationError" do
+  test "[P1] ApplicationJob discards on DeserializationError" do
     discard_handlers = ApplicationJob.rescue_handlers.map(&:first)
     assert_includes discard_handlers.map(&:to_s), "ActiveJob::DeserializationError",
       "ApplicationJob must discard_on ActiveJob::DeserializationError"
@@ -41,7 +42,7 @@ class ApplicationJobTest < ActiveSupport::TestCase
   # AC #1 — Dead-letter path: solid_queue_failed_executions table must exist in queue schema.
   # Solid Queue moves exhausted-retry jobs to this table (production queue database).
   # In the test database, we verify the schema file defines the table.
-  test "solid_queue_failed_executions table is defined in queue schema" do
+  test "[P1] solid_queue_failed_executions table is defined in queue schema" do
     queue_schema_path = Rails.root.join("db/queue_schema.rb")
     schema_content = File.read(queue_schema_path)
     assert_match(/solid_queue_failed_executions/, schema_content,
@@ -49,23 +50,23 @@ class ApplicationJobTest < ActiveSupport::TestCase
   end
 
   # AC #2 — Stub job classes must load without NameError (Solid Queue recurring entries reference them).
-  test "SendRegistrationConfirmationJob loads without NameError" do
+  test "[P1] SendRegistrationConfirmationJob loads without NameError" do
     assert defined?(SendRegistrationConfirmationJob),
       "SendRegistrationConfirmationJob class must be defined (stub for Story 3.2)"
   end
 
-  test "SendEventReminderJob loads without NameError" do
+  test "[P1] SendEventReminderJob loads without NameError" do
     assert defined?(SendEventReminderJob),
       "SendEventReminderJob class must be defined (stub for Story 3.8)"
   end
 
-  test "CloseExpiredRegistrationsJob loads without NameError" do
+  test "[P1] CloseExpiredRegistrationsJob loads without NameError" do
     assert defined?(CloseExpiredRegistrationsJob),
       "CloseExpiredRegistrationsJob class must be defined (stub for Story 3.1)"
   end
 
   # AC #2 — Stub jobs raise NotImplementedError (not silently pass or do wrong work).
-  test "stub job classes raise NotImplementedError on perform" do
+  test "[P1] stub job classes raise NotImplementedError on perform" do
     assert_raises(NotImplementedError) { SendRegistrationConfirmationJob.perform_now(1) }
     assert_raises(NotImplementedError) { SendEventReminderJob.perform_now(1) }
     assert_raises(NotImplementedError) { CloseExpiredRegistrationsJob.perform_now }
