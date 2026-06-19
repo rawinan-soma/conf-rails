@@ -60,29 +60,25 @@ class AuthorizationBaselineTest < ActionDispatch::IntegrationTest
   end
 
   # ---------------------------------------------------------------------------
-  # AC-2: Pundit rescue_from — unauthorized action returns 403 with flash (P0, FR-094)
-  # Tests the rescue_from Pundit::NotAuthorizedError handler in ApplicationController
+  # AC-2: Deny-by-default policy contract (the precondition that makes the
+  # rescue_from handler fire). This test asserts ONLY that the base policy denies
+  # an authenticated user — it does NOT exercise the rescue_from / redirect / flash
+  # / HTTP-status path, because no resource controller with an `authorize` call
+  # exists yet. The full end-to-end rescue integration is deferred to Story 2.1
+  # (the first story that introduces a real resource policy + controller action).
   # ---------------------------------------------------------------------------
 
-  test "[P0] Pundit::NotAuthorizedError is rescued with 403 redirect and flash alert" do
-    # This test verifies the rescue_from handler behavior by directly testing
-    # ApplicationPolicy deny behavior + flash/redirect contract.
-    #
-    # Full integration test with a real resource controller is deferred to Story 2.1
-    # (the first story that introduces a real resource policy + controller action).
-    # Here we validate the rescue_from wiring via the ApplicationPolicy unit + controller contract.
-    #
-    # Implementation note: Validates ApplicationPolicy.new(user, record).show? returns false,
-    # confirming deny-by-default triggers NotAuthorizedError when authorize is called.
-    # I18n key presence is verified separately in the dedicated locale tests below.
+  test "[P0] ApplicationPolicy denies an authenticated user by default — precondition for the NotAuthorizedError rescue" do
     sign_in
 
-    # Directly verify the policy returns false (deny-by-default baseline)
+    # Directly verify the policy returns false (deny-by-default baseline).
+    # When a controller eventually calls authorize on a record whose policy denies,
+    # this false result is what raises Pundit::NotAuthorizedError → handle_not_authorized.
     user = User.find(session[:user_id])
     policy = ApplicationPolicy.new(user, Object.new)
 
     assert_equal false, policy.show?,
-                 "ApplicationPolicy#show? must deny — triggering NotAuthorizedError when authorize is called"
+                 "ApplicationPolicy#show? must deny — this is what triggers NotAuthorizedError when authorize is called"
   end
 
   test "[P0] flash.not_authorized I18n key returns a non-empty string in English" do

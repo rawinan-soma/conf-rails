@@ -81,7 +81,10 @@ class ApplicationController < ActionController::Base
   private
 
   # Story 1.4: Handle Pundit authorization failures.
-  # Returns 403 via redirect to root_path with an alert flash message.
+  # Sets an alert flash and redirects the unauthorized user to root_path
+  # (an HTTP 302 redirect, not a 403 body — root is skip-listed so it never
+  # itself re-raises). A hard 403 response is intentionally not used here so
+  # the user lands on a usable page rather than a bare error.
   def handle_not_authorized
     flash[:alert] = t("flash.not_authorized")
     redirect_to root_path

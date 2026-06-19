@@ -4,7 +4,7 @@ baseline_commit: 6e1d462c36e4165ba2200ba43735795ccd3cb827
 
 # Story 1.4: Capacities, Admin Role & Pundit Authorization Baseline
 
-Status: review
+Status: done
 
 ## Story
 
@@ -65,6 +65,17 @@ so that access control is consistent and centrally enforced.
   - [x] **AC#3 test note (IMPORTANT):** AC#3 ("admin read bookings/registrant data") cannot be fully tested here — `Booking` and `Registration` models do not exist yet. Wrote test that asserts `admin?` returns `true` on admin fixtures with TODO comments for Story 2.1 and 3.1
   - [x] Run full test suite (`bundle exec rails test`) — must pass (≥76 tests, 0 failures/errors) — 140 tests, 0 failures
   - [x] Run `bundle exec rubocop`, `bundle exec brakeman --no-pager`, `bundle exec bundler-audit check --update`, `bundle exec i18n-tasks health` — all must pass
+
+### Review Findings
+
+Code review (2026-06-19) — Blind Hunter + Edge Case Hunter + Acceptance Auditor (3 layers, all completed).
+
+- [x] [Review][Patch] `handle_not_authorized` comment claimed "Returns 403" but `redirect_to root_path` issues HTTP 302 [app/controllers/application_controller.rb:84] — corrected misleading comment to describe the actual 302 redirect + flash behavior; redirect was the explicit Task 1 instruction and is what tests exercise.
+- [x] [Review][Patch] Integration test named "...403 redirect and flash alert" did not exercise the rescue/redirect/flash/status path [test/integration/authorization_baseline_test.rb:67] — renamed test and assertion message to reflect that it only asserts the deny-by-default policy contract; full rescue_from integration is deferred to Story 2.1 (spec-sanctioned).
+- [x] [Review][Defer] `Pundit::AuthorizationNotPerformedError` and `NotDefinedError` are siblings of `NotAuthorizedError` and are NOT rescued — a future controller that forgets `authorize` returns 500 [app/controllers/application_controller.rb:27] — deferred, by-design dev tripwire; no in-scope controller triggers it (only Home/Sessions exist, both skip). Revisit when first resource controller lands (Story 2.1).
+- [x] [Review][Defer] No regression test proving an un-skipped controller without `authorize` trips `verify_authorized` [test/integration/authorization_baseline_test.rb] — deferred, forward-looking; no such controller exists yet to test against. Add with first resource controller (Story 2.1).
+
+Dismissed as noise (4): th.yml English placeholder (spec-sanctioned: "English value is the placeholder"); SessionsController unconditional skip (spec-mandated for auth flows); redirect-to-root coupling (safe today, home#index skips); AC-3 structural stub (spec-sanctioned deferral to Stories 2.1/3.1, models do not exist yet).
 
 ## Dev Notes
 
