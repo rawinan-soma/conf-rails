@@ -36,7 +36,7 @@
 # - BAD pipeline enforces strict lowest-epic-first ordering: E1 → E2 → E3 → E4
 
 generated: 2026-06-18
-last_updated: 2026-06-19T19:30:00+07:00
+last_updated: 2026-06-19T20:00:00+07:00
 project: conf-rails
 
 project_key: NOKEY
@@ -47,8 +47,8 @@ development_status:
   # Epic 1 — Foundation, Identity & Platform
   epic-1: in-progress
   1-1-project-initialization-platform-scaffold: done
-  1-2-core-design-system-viewcomponent-ui-library: review
-  1-3-oidc-authentication-sessions: review
+  1-2-core-design-system-viewcomponent-ui-library: done
+  1-3-oidc-authentication-sessions: done
   1-4-capacities-admin-role-pundit-authorization-baseline: backlog
   1-5-first-login-profile-completion: backlog
   1-6-email-background-job-infrastructure: done
