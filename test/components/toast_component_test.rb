@@ -51,9 +51,9 @@ class ToastComponentTest < ViewComponent::TestCase
       render_inline(ToastComponent.new(message: "Reminder sent.", type: :info))
     end
     assert_text "Reminder sent."
-    # info type maps to success_prefix key (see ToastComponent::TYPE_PREFIXES)
-    assert_text I18n.t("components.toast.success_prefix"),
-                "info toast should render a prefix text (maps to success_prefix key)"
+    # info type maps to info_prefix key (see ToastComponent::TYPE_PREFIXES)
+    assert page.has_text?(I18n.t("components.toast.info_prefix")),
+           "info toast should render a prefix text (maps to info_prefix key)"
   end
 
   # ---------------------------------------------------------------------------
