@@ -37,14 +37,16 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "[P0] find_or_create_by_omniauth returns existing user for the same provider/uid" do
+    # Use a UID not in fixtures.yml to ensure find_or_create actually creates, then finds.
     auth = OmniAuth::AuthHash.new(
       provider: "openid_connect",
-      uid: "test-uid-regular-001",
-      info: { email: "regular@example.test" }
+      uid: "fresh-uid-for-idempotency-test",
+      info: { email: "idempotency@example.test" }
     )
 
-    # First call — creates
+    # First call — must create
     user_first = User.find_or_create_by_omniauth(auth)
+    assert user_first.persisted?, "First call must persist the user"
 
     assert_no_difference "User.count" do
       user_second = User.find_or_create_by_omniauth(auth)
@@ -54,22 +56,24 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "[P0] find_or_create_by_omniauth does NOT update email on subsequent logins" do
+    # Use a UID not in fixtures.yml so the first call truly creates the user.
+    uid = "fresh-uid-for-email-immutability-test"
     auth = OmniAuth::AuthHash.new(
       provider: "openid_connect",
-      uid: "test-uid-regular-001",
-      info: { email: "regular@example.test" }
+      uid: uid,
+      info: { email: "original@example.test" }
     )
     User.find_or_create_by_omniauth(auth)
 
     # Simulate IdP returning a changed email — must NOT overwrite stored email
     auth_with_new_email = OmniAuth::AuthHash.new(
       provider: "openid_connect",
-      uid: "test-uid-regular-001",
+      uid: uid,
       info: { email: "changed@example.test" }
     )
     user = User.find_or_create_by_omniauth(auth_with_new_email)
 
-    assert_equal "regular@example.test", user.reload.email,
+    assert_equal "original@example.test", user.reload.email,
                  "Email must NOT be silently updated on subsequent logins (FR-095 design)"
   end
 
@@ -156,11 +160,15 @@ class UserTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "[P2] User.admins scope returns only admin users" do
-    User.create!(provider: "openid_connect", uid: "uid-admin-001", email: "admin1@example.test", admin: true)
-    User.create!(provider: "openid_connect", uid: "uid-regular-001", email: "regular1@example.test", admin: false)
+    # Use UIDs distinct from fixtures to avoid ambiguity in assertions
+    User.create!(provider: "openid_connect", uid: "uid-admin-scope-001", email: "scopeadmin@example.test", admin: true)
+    User.create!(provider: "openid_connect", uid: "uid-regular-scope-001", email: "scopereg@example.test", admin: false)
 
-    admins = User.admins
-    assert admins.all?(&:admin?), "User.admins scope must return only admin users"
-    assert_not admins.any? { |u| !u.admin? }, "User.admins scope must exclude non-admin users"
+    assert User.admins.exists?(uid: "uid-admin-scope-001"),
+           "User.admins scope must include the newly created admin user"
+    refute User.admins.exists?(uid: "uid-regular-scope-001"),
+           "User.admins scope must exclude the non-admin user"
+    assert User.admins.all?(&:admin?),
+           "User.admins scope must return only users where admin is true"
   end
 end

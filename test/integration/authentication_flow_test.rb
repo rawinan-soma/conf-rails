@@ -68,12 +68,9 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P0] session expires after 30 minutes of inactivity" do
-    # Sign in
-    stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
-    get "/auth/openid_connect/callback"
-    assert_not_nil session[:user_id], "Pre-condition: must be signed in"
+    sign_in
 
-    # Simulate 31 minutes of inactivity by backdating last_active_at
+    # Simulate 31 minutes of inactivity
     travel 31.minutes do
       get root_path
     end
@@ -84,8 +81,7 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] session timeout sets a flash alert informing the user" do
-    stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
-    get "/auth/openid_connect/callback"
+    sign_in
 
     travel 31.minutes do
       get root_path
@@ -96,9 +92,7 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] session does NOT expire before 30 minutes of inactivity" do
-    stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
-    get "/auth/openid_connect/callback"
-    assert_not_nil session[:user_id], "Pre-condition: must be signed in"
+    sign_in
 
     # 29 minutes — should still be valid
     travel 29.minutes do
@@ -111,27 +105,27 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "[P0] inactivity timeout is a sliding window — activity resets the timer" do
-    stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
-    get "/auth/openid_connect/callback"
+    sign_in
+    now = Time.current
 
-    # Make a request at 25 minutes — should reset the timer
-    travel 25.minutes do
+    # Step 1: Make a request at T+25 min — resets the sliding window (last_active_at = T+25)
+    travel_to(now + 25.minutes) do
       get root_path
-      assert_not_nil session[:user_id], "Session must still be active at 25 minutes"
+      assert_not_nil session[:user_id], "Session must still be active at T+25 min"
     end
 
-    # Make another request 25 minutes after the activity (now 50 min total, but only 25 since last activity)
-    travel 50.minutes do
+    # Step 2: Make a request at T+50 min (25 min since last activity at T+25 < 30 min limit)
+    # Time arithmetic: elapsed = (T+50) - (T+25) = 25 min < 30 min → session still valid
+    travel_to(now + 50.minutes) do
       get root_path
     end
 
     assert_not_nil session[:user_id],
-                   "Session must remain active when there is activity within the 30-min window (sliding window)"
+                   "Session must remain active: activity at T+25 reset timer, only 25 min elapsed since"
   end
 
   test "[P0] session timeout calls reset_session to prevent session fixation" do
-    stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
-    get "/auth/openid_connect/callback"
+    sign_in
     old_session_id = request.session.id.to_s
 
     travel 31.minutes do
@@ -182,8 +176,7 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P1] session[:last_active_at] is updated on each authenticated request" do
-    stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
-    get "/auth/openid_connect/callback"
+    sign_in
 
     initial_last_active = session[:last_active_at]
     assert_not_nil initial_last_active, "session[:last_active_at] must be set after sign-in"
@@ -201,8 +194,7 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "[P1] current_user returns the authenticated user for a valid session" do
-    stub_omniauth(uid: "test-uid-regular-001", email: "regular@example.test")
-    get "/auth/openid_connect/callback"
+    sign_in
 
     # Access a page that exposes current_user (e.g., layout renders sign-out link)
     get root_path
